@@ -127,7 +127,8 @@ const EmployeeDashboard = () => {
     loadQuestions();
 
     // Load pending employees (admin only)
-    if (user?.name === '이승연') {
+    const isAdmin = user?.name === '이승연';
+    if (isAdmin) {
       loadPendingEmployees();
     }
 
@@ -144,7 +145,7 @@ const EmployeeDashboard = () => {
       loadQuestions();
     }, 2000); // Poll questions every 2 seconds
 
-    const pendingInterval = user?.name === '이승연'
+    const pendingInterval = isAdmin
       ? setInterval(loadPendingEmployees, 30000)
       : null;
 
@@ -154,19 +155,22 @@ const EmployeeDashboard = () => {
       clearInterval(questionsInterval);
       if (pendingInterval) clearInterval(pendingInterval);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.name]);
 
   // Browser tab notification when new items arrive (static, no blinking)
   useEffect(() => {
+    const originalTitle = originalTitleRef.current; // Capture ref value
     if (hasNewItems) {
       document.title = '🔴🔴🔴 새 알림 🔴🔴🔴';
     } else {
-      document.title = originalTitleRef.current;
+      document.title = originalTitle;
     }
   }, [hasNewItems]);
 
   // Clear new items notification when window gets focus and immediately refresh data
   useEffect(() => {
+    const originalTitle = originalTitleRef.current; // Capture ref value for cleanup
     const handleFocus = () => {
       setHasNewItems(false);
     };
@@ -183,7 +187,7 @@ const EmployeeDashboard = () => {
     return () => {
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      document.title = originalTitleRef.current;
+      document.title = originalTitle;
     };
   }, []);
 

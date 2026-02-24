@@ -132,6 +132,7 @@ const LandingPage = () => {
 
   // Animate counter when section becomes visible
   useEffect(() => {
+    const currentRef = counterRef.current; // Capture ref value for cleanup
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -158,13 +159,13 @@ const LandingPage = () => {
       { threshold: 0.5 }
     );
 
-    if (counterRef.current) {
-      observer.observe(counterRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (counterRef.current) {
-        observer.unobserve(counterRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [isCounterVisible]);
