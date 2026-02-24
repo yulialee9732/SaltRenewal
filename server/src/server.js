@@ -1,15 +1,37 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const connectDB = require('./config/db');
+const { initializeSheets } = require('./services/googleSheets');
+const { initializeEmail } = require('./services/emailService');
+const { scheduleDailyEmail } = require('./services/dailyEmailScheduler');
 
-// Load environment variables
-dotenv.config();
+// Load environment variables from the server root directory
+const envPath = path.join(__dirname, '..', '.env');
+console.log('📁 Loading .env from:', envPath);
+console.log('📁 File exists:', require('fs').existsSync(envPath));
+const result = dotenv.config({ path: envPath });
+if (result.error) {
+  console.error('❌ Error loading .env:', result.error);
+} else {
+  console.log('✅ .env loaded successfully');
+  console.log('✅ GOOGLE_SPREADSHEET_ID:', process.env.GOOGLE_SPREADSHEET_ID ? 'Found' : 'Missing');
+}
 
 const app = express();
 
 // Connect Database
 connectDB();
+
+// Initialize Google Sheets (async, non-blocking)
+initializeSheets().catch(err => console.error('Google Sheets initialization failed:', err.message));
+
+// Initialize Email Service (async, non-blocking)
+initializeEmail();
+
+// Initialize Daily Email Scheduler (7:00 AM NC time)
+scheduleDailyEmail();
 
 // Middleware
 app.use(cors());
@@ -18,8 +40,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/service-requests', require('./routes/serviceRequests'));
-app.use('/api/contact-forms', require('./routes/contactForms'));
+app.use('/api/price-estimate', require('./routes/priceEstimates'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 // Health check
 app.get('/', (req, res) => {

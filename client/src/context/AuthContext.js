@@ -47,6 +47,12 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authAPI.register(userData);
+
+      // Employee pending approval — no token issued yet
+      if (response.data.pending) {
+        return { success: true, pending: true, message: response.data.message };
+      }
+
       const { token, ...user } = response.data;
       
       localStorage.setItem('token', token);

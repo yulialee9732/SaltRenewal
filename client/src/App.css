@@ -17,9 +17,14 @@ body {
   min-height: 100vh;
 }
 
+/* Add padding to account for fixed navbar on other pages */
+.App > div:not(.landing-page) {
+  padding-top: 70px;
+}
+
 /* Container */
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -36,12 +41,12 @@ body {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #0099b0;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #007a8d;
 }
 
 .btn-secondary {
@@ -93,7 +98,7 @@ body {
 
 .form-control:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #0099b0;
 }
 
 textarea.form-control {
@@ -163,7 +168,7 @@ select.form-control {
 }
 
 .badge-in-progress {
-  background-color: #17a2b8;
+  background-color: #0099b0;
   color: white;
 }
 
@@ -178,7 +183,7 @@ select.form-control {
 }
 
 .badge-new {
-  background-color: #007bff;
+  background-color: #0099b0;
   color: white;
 }
 
@@ -259,7 +264,7 @@ select.form-control {
 
 .spinner {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #007bff;
+  border-top: 4px solid #0099b0;
   border-radius: 50%;
   width: 40px;
   height: 40px;

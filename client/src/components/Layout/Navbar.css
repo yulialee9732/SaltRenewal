@@ -2,43 +2,259 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 1rem 0;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.navbar-transparent {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 2rem 0;
+}
+
+.navbar-transparent .navbar-brand {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-transparent .navbar-brand span {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-transparent .navbar-user {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-scrolled {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem 0;
+}
+
+.navbar-scrolled .navbar-brand {
+  color: #0099b0;
+  text-shadow: none;
+}
+
+.navbar-scrolled .navbar-brand span {
+  color: #0099b0;
+  text-shadow: none;
+}
+
+.navbar-scrolled .navbar-user {
+  color: #333;
+  text-shadow: none;
 }
 
 .navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+@media (min-width: 768px) {
+  .navbar-container {
+    padding-left: 8%;
+    padding-right: 8%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navbar-container {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .navbar-container {
+    padding-left: 12%;
+    padding-right: 12%;
+  }
 }
 
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #007bff;
+  color: #0099b0;
   text-decoration: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.navbar-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
 }
 
 .navbar-brand:hover {
-  color: #0056b3;
+  color: #007a8d;
 }
 
 .navbar-menu {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 25px;
+}
+
+.navbar-service-link {
+  color: #424242;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 0.4rem 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar-service-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #0099b0;
+  transition: width 0.3s ease;
+}
+
+.navbar-service-link:hover {
+  color: #0099b0;
+}
+
+.navbar-service-link:hover::after {
+  width: 100%;
+}
+
+.navbar-transparent .navbar-service-link {
+  color: #424242;
+}
+
+.navbar-transparent .navbar-service-link::after {
+  background-color: #0099b0;
+}
+
+.navbar-transparent .navbar-service-link:hover {
+  color: #0099b0;
+}
+
+.navbar-scrolled .navbar-service-link {
+  color: #424242;
+}
+
+.navbar-scrolled .navbar-service-link::after {
+  background-color: #0099b0;
+}
+
+.navbar-scrolled .navbar-service-link:hover {
+  color: #0099b0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-service-link {
+    display: none;
+  }
 }
 
 .navbar-user {
   color: #333;
   font-weight: 500;
+  font-size: 16px;
+  margin-right: 5px;
 }
 
 .navbar-menu .btn {
   text-decoration: none;
   display: inline-block;
+}
+
+.logout-btn {
+  background: none;
+  border: 1px solid #424242;
+  color: #424242;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #0099b0;
+  border-color: #0099b0;
+  color: white;
+}
+
+.navbar-transparent .logout-btn {
+  color: #424242;
+  border-color: #424242;
+}
+
+.navbar-transparent .logout-btn:hover {
+  background-color: #0099b0;
+  border-color: #0099b0;
+  color: white;
+}
+
+.navbar-scrolled .logout-btn {
+  color: #424242;
+  border-color: #424242;
+}
+
+.navbar-scrolled .logout-btn:hover {
+  background-color: #0099b0;
+  border-color: #0099b0;
+  color: white;
+}
+
+.navbar-link {
+  color: #424242;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.navbar-link:hover {
+  background-color: #0099b0;
+  border-color: #0099b0;
+  color: white;
+}
+
+.navbar-transparent .navbar-link {
+  color: #424242;
+  border: 1px solid #424242;
+}
+
+.navbar-transparent .navbar-link:hover {
+  background-color: #0099b0;
+  border-color: #0099b0;
+  color: white;
+}
+
+.navbar-scrolled .navbar-link {
+  color: #424242;
+  border: 1px solid #424242;
+}
+
+.navbar-scrolled .navbar-link:hover {
+  background-color: #0099b0;
+  border-color: #0099b0;
+  color: white;
 }

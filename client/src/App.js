@@ -5,10 +5,12 @@ import './App.css';
 
 // Components
 import Login from './components/Auth/Login';
-import Register from './components/Auth/Register';
+import CustomerRegister from './components/Auth/CustomerRegister';
+import EmployeeRegister from './components/Auth/EmployeeRegister';
 import CustomerDashboard from './components/Customer/CustomerDashboard';
 import EmployeeDashboard from './components/Employee/EmployeeDashboard';
 import Navbar from './components/Layout/Navbar';
+import LandingPage from './components/Landing/LandingPage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -30,7 +32,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 };
 
 function AppContent() {
-  const { isAuthenticated, isEmployee, isCustomer } = useAuth();
+  const { isAuthenticated, isEmployee } = useAuth();
 
   return (
     <div className="App">
@@ -42,12 +44,13 @@ function AppContent() {
             isAuthenticated ? (
               isEmployee ? <Navigate to="/employee/dashboard" /> : <Navigate to="/customer/dashboard" />
             ) : (
-              <Navigate to="/login" />
+              <LandingPage />
             )
           } 
         />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<CustomerRegister />} />
+        <Route path="/register/employee" element={<EmployeeRegister />} />
         
         <Route
           path="/customer/dashboard"

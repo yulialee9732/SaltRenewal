@@ -7,10 +7,16 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please add a name'],
     trim: true
   },
+  username: {
+    type: String,
+    required: [true, 'Please add a username'],
+    unique: true,
+    lowercase: true,
+    trim: true,
+    minlength: [3, 'Username must be at least 3 characters']
+  },
   email: {
     type: String,
-    required: [true, 'Please add an email'],
-    unique: true,
     lowercase: true,
     trim: true,
     match: [
@@ -31,11 +37,13 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
+    required: [true, 'Please add a phone number'],
     trim: true
   },
-  company: {
+  status: {
     type: String,
-    trim: true
+    enum: ['active', 'pending'],
+    default: 'active'
   },
   createdAt: {
     type: Date,

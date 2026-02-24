@@ -7,13 +7,13 @@ const Login = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { email, password } = formData;
+  const { username, password } = formData;
 
   React.useEffect(() => {
     if (isAuthenticated) {
@@ -30,7 +30,7 @@ const Login = () => {
     setError('');
     setLoading(true);
 
-    const result = await login({ email, password });
+    const result = await login({ username, password });
     
     if (result.success) {
       navigate('/');
@@ -44,16 +44,16 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Login</h2>
+        <h2>로그인</h2>
         {error && <div className="alert alert-danger">{error}</div>}
         
         <form onSubmit={onSubmit}>
           <div className="form-group">
-            <label>Email</label>
+            <label>아이디</label>
             <input
-              type="email"
-              name="email"
-              value={email}
+              type="text"
+              name="username"
+              value={username}
               onChange={onChange}
               className="form-control"
               required
@@ -61,7 +61,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label>Password</label>
+            <label>비밀번호</label>
             <input
               type="password"
               name="password"
@@ -73,12 +73,15 @@ const Login = () => {
           </div>
 
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? '로그인 중...' : '로그인'}
           </button>
         </form>
 
         <p className="auth-link">
-          Don't have an account? <Link to="/register">Register here</Link>
+          계정이 없으신가요? <Link to="/register">회원가입</Link>
+        </p>
+        <p className="auth-link">
+          <Link to="/register/employee">임직원 회원가입으로 이동</Link>
         </p>
       </div>
     </div>

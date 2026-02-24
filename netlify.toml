@@ -1,0 +1,24 @@
+[build]
+  # Build from the client directory
+  base = "client/"
+  
+  # Directory that contains the deploy-ready HTML files and assets
+  publish = "client/build/"
+  
+  # Build command
+  command = "npm install && npm run build"
+
+# Redirect all requests to index.html for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Optional: Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"

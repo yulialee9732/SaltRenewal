@@ -36,13 +36,13 @@ const CustomerDashboard = () => {
     e.preventDefault();
     try {
       await serviceRequestAPI.create(formData);
-      setMessage('Service request created successfully!');
+      setMessage('서비스 요청이 성공적으로 생성되었습니다!');
       setShowServiceModal(false);
       setFormData({});
       fetchData();
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Error creating service request');
+      setMessage(error.response?.data?.message || '서비스 요청 생성 중 오류가 발생했습니다');
     }
   };
 
@@ -50,13 +50,13 @@ const CustomerDashboard = () => {
     e.preventDefault();
     try {
       await contactFormAPI.create(formData);
-      setMessage('Contact form submitted successfully!');
+      setMessage('문의가 성공적으로 제출되었습니다!');
       setShowContactModal(false);
       setFormData({});
       fetchData();
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Error submitting contact form');
+      setMessage(error.response?.data?.message || '문의 제출 중 오류가 발생했습니다');
     }
   };
 
@@ -71,16 +71,16 @@ const CustomerDashboard = () => {
   return (
     <div className="dashboard-container">
       <div className="container">
-        <h1>Customer Dashboard</h1>
+        <h1>고객 대시보드</h1>
         
         {message && <div className="alert alert-success">{message}</div>}
 
         <div className="dashboard-actions">
           <button onClick={() => setShowServiceModal(true)} className="btn btn-primary">
-            New A/S Request
+            새 A/S 요청
           </button>
           <button onClick={() => setShowContactModal(true)} className="btn btn-secondary">
-            New Contact Form
+            새 문의하기
           </button>
         </div>
 
@@ -89,30 +89,30 @@ const CustomerDashboard = () => {
             className={`tab ${activeTab === 'serviceRequests' ? 'active' : ''}`}
             onClick={() => setActiveTab('serviceRequests')}
           >
-            A/S Requests ({serviceRequests.length})
+            A/S 요청 ({serviceRequests.length})
           </button>
           <button 
             className={`tab ${activeTab === 'contactForms' ? 'active' : ''}`}
             onClick={() => setActiveTab('contactForms')}
           >
-            Contact Forms ({contactForms.length})
+            문의 내역 ({contactForms.length})
           </button>
         </div>
 
         {activeTab === 'serviceRequests' && (
           <div className="card">
-            <h3 className="card-header">My Service Requests</h3>
+            <h3 className="card-header">내 A/S 요청</h3>
             {serviceRequests.length === 0 ? (
-              <p>No service requests yet.</p>
+              <p>아직 서비스 요청이 없습니다.</p>
             ) : (
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Subject</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Created</th>
+                    <th>제목</th>
+                    <th>카테고리</th>
+                    <th>상태</th>
+                    <th>우선순위</th>
+                    <th>생성일</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@ const CustomerDashboard = () => {
                       <td>{request.category}</td>
                       <td><span className={`badge badge-${request.status}`}>{request.status}</span></td>
                       <td>{request.priority}</td>
-                      <td>{new Date(request.createdAt).toLocaleDateString()}</td>
+                      <td>{new Date(request.createdAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -133,17 +133,17 @@ const CustomerDashboard = () => {
 
         {activeTab === 'contactForms' && (
           <div className="card">
-            <h3 className="card-header">My Contact Forms</h3>
+            <h3 className="card-header">내 문의 내역</h3>
             {contactForms.length === 0 ? (
-              <p>No contact forms yet.</p>
+              <p>아직 문의 내역이 없습니다.</p>
             ) : (
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Subject</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Created</th>
+                    <th>제목</th>
+                    <th>이메일</th>
+                    <th>상태</th>
+                    <th>생성일</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,7 +152,7 @@ const CustomerDashboard = () => {
                       <td>{form.subject}</td>
                       <td>{form.email}</td>
                       <td><span className={`badge badge-${form.status}`}>{form.status}</span></td>
-                      <td>{new Date(form.createdAt).toLocaleDateString()}</td>
+                      <td>{new Date(form.createdAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -165,33 +165,33 @@ const CustomerDashboard = () => {
         {showServiceModal && (
           <div className="modal-overlay" onClick={() => setShowServiceModal(false)}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <h3 className="modal-header">New Service Request</h3>
+              <h3 className="modal-header">새 서비스 요청</h3>
               <form onSubmit={handleServiceSubmit}>
                 <div className="form-group">
-                  <label>Subject</label>
+                  <label>제목</label>
                   <input type="text" name="subject" onChange={onChange} className="form-control" required />
                 </div>
                 <div className="form-group">
-                  <label>Description</label>
+                  <label>설명</label>
                   <textarea name="description" onChange={onChange} className="form-control" required />
                 </div>
                 <div className="form-group">
-                  <label>Category</label>
+                  <label>카테고리</label>
                   <select name="category" onChange={onChange} className="form-control">
-                    <option value="warranty">Warranty</option>
-                    <option value="repair">Repair</option>
-                    <option value="replacement">Replacement</option>
-                    <option value="consultation">Consultation</option>
-                    <option value="other">Other</option>
+                    <option value="warranty">보증</option>
+                    <option value="repair">수리</option>
+                    <option value="replacement">교체</option>
+                    <option value="consultation">상담</option>
+                    <option value="other">기타</option>
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Product Name</label>
+                  <label>제품명</label>
                   <input type="text" name="productInfo.name" onChange={(e) => setFormData({...formData, productInfo: {...formData.productInfo, name: e.target.value}})} className="form-control" />
                 </div>
                 <div className="modal-footer">
-                  <button type="button" onClick={() => setShowServiceModal(false)} className="btn btn-secondary">Cancel</button>
-                  <button type="submit" className="btn btn-primary">Submit</button>
+                  <button type="button" onClick={() => setShowServiceModal(false)} className="btn btn-secondary">취소</button>
+                  <button type="submit" className="btn btn-primary">제출</button>
                 </div>
               </form>
             </div>
@@ -202,31 +202,31 @@ const CustomerDashboard = () => {
         {showContactModal && (
           <div className="modal-overlay" onClick={() => setShowContactModal(false)}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <h3 className="modal-header">New Contact Form</h3>
+              <h3 className="modal-header">새 문의하기</h3>
               <form onSubmit={handleContactSubmit}>
                 <div className="form-group">
-                  <label>Name</label>
+                  <label>이름</label>
                   <input type="text" name="name" onChange={onChange} className="form-control" required />
                 </div>
                 <div className="form-group">
-                  <label>Email</label>
+                  <label>이메일</label>
                   <input type="email" name="email" onChange={onChange} className="form-control" required />
                 </div>
                 <div className="form-group">
-                  <label>Phone</label>
+                  <label>전화번호</label>
                   <input type="tel" name="phone" onChange={onChange} className="form-control" />
                 </div>
                 <div className="form-group">
-                  <label>Subject</label>
+                  <label>제목</label>
                   <input type="text" name="subject" onChange={onChange} className="form-control" required />
                 </div>
                 <div className="form-group">
-                  <label>Message</label>
+                  <label>메시지</label>
                   <textarea name="message" onChange={onChange} className="form-control" required />
                 </div>
                 <div className="modal-footer">
-                  <button type="button" onClick={() => setShowContactModal(false)} className="btn btn-secondary">Cancel</button>
-                  <button type="submit" className="btn btn-primary">Submit</button>
+                  <button type="button" onClick={() => setShowContactModal(false)} className="btn btn-secondary">취소</button>
+                  <button type="submit" className="btn btn-primary">제출</button>
                 </div>
               </form>
             </div>

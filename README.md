@@ -30,12 +30,27 @@ A full-stack MERN application with separate customer and employee portals for ma
 - **Mongoose** - ODM
 - **JWT** - Authentication
 - **bcryptjs** - Password hashing
+- **nodemailer** - Email notifications
+- **Google Sheets API** - Form submission tracking (optional)
 
 ### Frontend
 - **React** - UI library
 - **React Router** - Routing
 - **Axios** - HTTP client
 - **Context API** - State management
+
+## New Features
+
+### 🎯 Google Sheets Integration
+All form submissions are now automatically saved to Google Sheets in real-time:
+- Price Estimate submissions
+- Service Request submissions
+- Contact Form submissions
+
+**Setup Guide:** See [GOOGLE_SHEETS_SETUP.md](./GOOGLE_SHEETS_SETUP.md) for detailed instructions.
+**Quick Start:** See [GOOGLE_SHEETS_QUICK_START.md](./GOOGLE_SHEETS_QUICK_START.md) for a 5-minute setup guide.
+
+> **Note:** Google Sheets integration is optional. The app works perfectly without it, saving all data to MongoDB.
 
 ## Installation
 
