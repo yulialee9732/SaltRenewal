@@ -8,6 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   
   const isLandingPage = location.pathname === '/';
 
@@ -30,9 +31,25 @@ const Navbar = () => {
     };
   }, [isLandingPage]);
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuOpen && !e.target.closest('.navbar-container')) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [menuOpen]);
+
   const handleLogout = () => {
     logout();
     navigate('/');
+    setMenuOpen(false);
+  };
+
+  const handleMenuClick = () => {
+    setMenuOpen(false);
   };
 
   const navbarClass = isLandingPage 
@@ -49,14 +66,26 @@ const Navbar = () => {
         <Link to="/" className="navbar-brand">
           <img src={logoSrc} alt="Logo" className="navbar-logo" />
         </Link>
-        <div className="navbar-menu">
-          <a href="#packages-section" className="navbar-service-link">
+        
+        {/* Hamburger Menu Button */}
+        <button 
+          className={`hamburger ${menuOpen ? 'active' : ''}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div className={`navbar-menu ${menuOpen ? 'active' : ''}`}>
+          <a href="#packages-section" className="navbar-service-link" onClick={handleMenuClick}>
             솔트의 맞춤형 솔루션
           </a>
-          <a href="#resolution-section" className="navbar-service-link">
+          <a href="#resolution-section" className="navbar-service-link" onClick={handleMenuClick}>
             실시간 영상확인
           </a>
-          <a href="#self-quote" className="navbar-service-link">
+          <a href="#self-quote" className="navbar-service-link" onClick={handleMenuClick}>
             셀프 견적확인
           </a>
           {isAuthenticated ? (
@@ -67,7 +96,7 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            <Link to="/login" className="navbar-link">
+            <Link to="/login" className="navbar-link navbar-login" onClick={handleMenuClick}>
               로그인
             </Link>
           )}
