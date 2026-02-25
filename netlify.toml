@@ -8,6 +8,9 @@
   # Build command
   command = "npm install && npm run build"
 
+[build.environment]
+  REACT_APP_API_URL = "https://saltrenewal.onrender.com/api"
+
 # Redirect all requests to index.html for React Router
 [[redirects]]
   from = "/*"

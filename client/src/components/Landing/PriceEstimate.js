@@ -71,34 +71,17 @@ const PriceEstimate = () => {
     afternoon: ['12pm', '12:30pm', '1pm', '1:30pm', '2pm', '2:30pm', '3pm', '3:30pm', '4pm', '4:30pm', '5pm', '5:30pm']
   };
 
-  const calculatePrice = (type = cameraType) => {
+  const calculatePrice = () => {
     const totalCameras = indoorCount + outdoorCount;
     
     // Price map for 210만화소
-    const priceMap210 = {
-      2: 19000, 3: 23000, 4: 27000, 5: 33000, 6: 38000, 7: 43000, 8: 48000,
-      9: 60000, 10: 65000, 11: 70000, 12: 74000, 13: 79000, 14: 83000,
-      15: 89000, 16: 93000
+    const priceMap = {
+      2: 22000, 3: 26000, 4: 30000, 5: 36000, 6: 40000, 7: 44000, 8: 48000,
+      9: 60000, 10: 64000, 11: 68000, 12: 72000, 13: 76000, 14: 80000,
+      15: 84000, 16: 88000
     };
     
-    // Price map for 500만화소
-    const priceMap500 = {
-      2: 21000, 3: 26000, 4: 33000, 5: 41000, 6: 47000, 7: 53000, 8: 59000,
-      9: 72000, 10: 78000, 11: 84000, 12: 90000, 13: 96000, 14: 102000,
-      15: 108000, 16: 114000
-    };
-    
-    if (type === '210만') {
-      return priceMap210[totalCameras] || 0;
-    } else if (type === '500만') {
-      return priceMap500[totalCameras] || 0;
-    } else if (type === '둘다') {
-      return {
-        price210: priceMap210[totalCameras] || 0,
-        price500: priceMap500[totalCameras] || 0
-      };
-    }
-    return 0;
+    return priceMap[totalCameras] || 0;
   };
 
   const toggleIotOption = (optionId) => {
@@ -179,7 +162,7 @@ const PriceEstimate = () => {
         date: selectedDate,
         time: selectedTime
       },
-      price: cameraType === '둘다' ? calculatePrice('210만') : calculatePrice(),
+      price: calculatePrice(),
       submittedAt: new Date().toISOString()
     };
 
@@ -256,7 +239,7 @@ const PriceEstimate = () => {
         date: null,
         time: ''
       },
-      price: cameraType === '둘다' ? calculatePrice('210만') : calculatePrice(),
+      price: calculatePrice(),
       submittedAt: new Date().toISOString()
     };
 
@@ -409,26 +392,10 @@ const PriceEstimate = () => {
             {/* Camera Type Selection */}
             <div className="camera-type-section">
               <h3>카메라</h3>
-              <div className="camera-type-buttons">
-                <button 
-                  className={cameraType === '210만' ? 'active' : ''}
-                  onClick={() => setCameraType('210만')}
-                >
-                  210만
-                </button>
-                <button 
-                  className={cameraType === '500만' ? 'active' : ''}
-                  onClick={() => setCameraType('500만')}
-                >
-                  500만
-                </button>
-                <button 
-                  className={cameraType === '둘다' ? 'active' : ''}
-                  onClick={() => setCameraType('둘다')}
-                >
-                  둘다
-                </button>
-              </div>
+              <label className="camera-type-checkbox">
+                <input type="checkbox" checked readOnly />
+                <span>210만화소</span>
+              </label>
             </div>
 
             {/* Camera Quantity */}
@@ -539,20 +506,9 @@ const PriceEstimate = () => {
                     16대 이상은 상담원에게 문의해 주세요
                   </span>
                 </div>
-              ) : cameraType === '둘다' ? (
-                <>
-                  <div className="price-item main-price">
-                    <span>210만화소 카메라 {indoorCount + outdoorCount}대 기본 월정액 (3년 약정)</span>
-                    <span>{calculatePrice('210만').toLocaleString()}원 /월</span>
-                  </div>
-                  <div className="price-item main-price">
-                    <span>500만화소 카메라 {indoorCount + outdoorCount}대 기본 월정액 (3년 약정)</span>
-                    <span>{calculatePrice('500만').toLocaleString()}원 /월</span>
-                  </div>
-                </>
               ) : (
                 <div className="price-item main-price">
-                  <span>{cameraType}화소 카메라 {indoorCount + outdoorCount}대 기본 월정액 (3년 약정)</span>
+                  <span>210만화소 카메라 {indoorCount + outdoorCount}대 기본 월정액 (3년 약정)</span>
                   <span>{calculatePrice().toLocaleString()}원 /월</span>
                 </div>
               )}
@@ -598,18 +554,13 @@ const PriceEstimate = () => {
             <div className="summary-content">
               <p><strong>카메라:</strong></p>
               <ul>
-                <li>{cameraType === '둘다' ? '210만화소, 500만화소' : `${cameraType}화소`}</li>
+                <li>210만화소</li>
                 <li>실내 카메라 {indoorCount}대</li>
                 {outdoorCount > 0 && <li>실외 카메라 {outdoorCount}대</li>}
               </ul>
               <div className="divider"></div>
               {indoorCount + outdoorCount > 16 ? (
                 <p className="price-display" style={{ color: '#ff6b6b' }}>16대 이상은 상담원에게 문의해 주세요</p>
-              ) : cameraType === '둘다' ? (
-                <>
-                  <p className="price-display">210만화소: {calculatePrice('210만').toLocaleString()}원</p>
-                  <p className="price-display">500만화소: {calculatePrice('500만').toLocaleString()}원</p>
-                </>
               ) : (
                 <p className="price-display">기본 금액 {calculatePrice().toLocaleString()}원</p>
               )}
