@@ -492,6 +492,7 @@ const LandingPage = () => {
           {/* IoT - on top of display */}
           <div className="main-iot-container">
             <img src={`${process.env.PUBLIC_URL}/img/main-page/main-iot.png`} alt="IoT" className="main-iot-image" />
+            <img src={`${process.env.PUBLIC_URL}/img/main-page/main-iot.png`} alt="IoT" className="main-iot-image" />
           </div>
         </div>
         <div className="scroll-indicator" onClick={scrollToContent}>
@@ -564,7 +565,7 @@ const LandingPage = () => {
           <div className="scheduling-content">
             <h2 className="scheduling-title">설치를 희망하는 날짜가 있으신가요?</h2>
             <p className="scheduling-description">
-              설치를 희망 하는 날짜와 시간을 선택하여
+              설치를 희망 하는 날짜와 시간을 선택하여<br/>
               전문 기사의 방문 일정을 예약하세요
             </p>
             <button className="schedule-btn" onClick={() => setIsScheduleModalOpen(true)}>
@@ -681,7 +682,7 @@ const LandingPage = () => {
           <div className="locations-grid">
             <div className="location-item">
               <div className="location-image-wrapper">
-                <img src={`${process.env.PUBLIC_URL}/img/whereever/black-friday-store-tiltshift-fake-stories.jpg`} alt="매장" className="location-bg" />
+                <img src={`${process.env.PUBLIC_URL}/img/whereever/store.jpg`} alt="매장" className="location-bg" />
                 <div className="location-overlay"></div>
                 <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
                 <span className="location-text-overlay">매장</span>
@@ -691,37 +692,7 @@ const LandingPage = () => {
             
             <div className="location-item">
               <div className="location-image-wrapper">
-                <img src={`${process.env.PUBLIC_URL}/img/whereever/empty-shopping-center-malls.jpg`} alt="쇼핑센터" className="location-bg" />
-                <div className="location-overlay"></div>
-                <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
-                <span className="location-text-overlay">쇼핑센터</span>
-                <p className="location-description">500만 화소 초고화질 CCTV로 대형<br/>쇼핑센터의 보안을 빈틈없이 관리합니다.</p>
-              </div>
-            </div>
-            
-            <div className="location-item">
-              <div className="location-image-wrapper">
-                <img src={`${process.env.PUBLIC_URL}/img/whereever/business-meeting-green-working-room-office-building.jpg`} alt="오피스" className="location-bg" />
-                <div className="location-overlay"></div>
-                <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
-                <span className="location-text-overlay">오피스</span>
-                <p className="location-description">지문·카드 출입통제로 사무실과 학원을<br/>더욱 안전하고 체계적으로 보호합니다.</p>
-              </div>
-            </div>
-            
-            <div className="location-item">
-              <div className="location-image-wrapper">
-                <img src={`${process.env.PUBLIC_URL}/img/whereever/angel-bookstore-bookstore-hangzhou-china.jpg`} alt="서점" className="location-bg" />
-                <div className="location-overlay"></div>
-                <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
-                <span className="location-text-overlay">서점</span>
-                <p className="location-description">화재 감지 센서와 첨단 보안 솔루션으로<br/>소중한 공간과 자산을 안전하게 보호합니다.</p>
-              </div>
-            </div>
-            
-            <div className="location-item">
-              <div className="location-image-wrapper">
-                <img src={`${process.env.PUBLIC_URL}/img/whereever/gym-with-sign-that-says-gym-wall.jpg`} alt="헬스장" className="location-bg" />
+                <img src={`${process.env.PUBLIC_URL}/img/whereever/gym.jpg`} alt="헬스장" className="location-bg" />
                 <div className="location-overlay"></div>
                 <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
                 <span className="location-text-overlay">헬스장</span>
@@ -731,11 +702,41 @@ const LandingPage = () => {
             
             <div className="location-item">
               <div className="location-image-wrapper">
-                <img src={`${process.env.PUBLIC_URL}/img/whereever/row-cars-are-lined-up-parking-garage.jpg`} alt="주차장" className="location-bg" />
+                <img src={`${process.env.PUBLIC_URL}/img/whereever/bookstore.jpg`} alt="서점" className="location-bg" />
+                <div className="location-overlay"></div>
+                <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
+                <span className="location-text-overlay">서점</span>
+                <p className="location-description">화재 감지 센서와 첨단 보안 솔루션으로<br/>소중한 공간과 자산을 안전하게 보호합니다.</p>
+              </div>
+            </div>
+            
+            <div className="location-item">
+              <div className="location-image-wrapper">
+                <img src={`${process.env.PUBLIC_URL}/img/whereever/parkinglot.jpg`} alt="주차장" className="location-bg" />
                 <div className="location-overlay"></div>
                 <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
                 <span className="location-text-overlay">주차장</span>
                 <p className="location-description">500만 화소 초고화질 CCTV로 차량<br/>입출차를 선명하고 정확하게 관리합니다.</p>
+              </div>
+            </div>
+            
+            <div className="location-item">
+              <div className="location-image-wrapper">
+                <img src={`${process.env.PUBLIC_URL}/img/whereever/mall.jpg`} alt="쇼핑센터" className="location-bg" />
+                <div className="location-overlay"></div>
+                <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
+                <span className="location-text-overlay">쇼핑센터</span>
+                <p className="location-description">500만 화소 초고화질 CCTV로 대형<br/>쇼핑센터의 보안을 빈틈없이 관리합니다.</p>
+              </div>
+            </div>
+            
+            <div className="location-item">
+              <div className="location-image-wrapper">
+                <img src={`${process.env.PUBLIC_URL}/img/whereever/office.jpg`} alt="오피스" className="location-bg" />
+                <div className="location-overlay"></div>
+                <img src={`${process.env.PUBLIC_URL}/img/price-est/cameraDVR/inside210.png`} alt="Camera" className="location-cam-overlay" />
+                <span className="location-text-overlay">오피스</span>
+                <p className="location-description">지문·카드 출입통제로 사무실과 학원을<br/>더욱 안전하고 체계적으로 보호합니다.</p>
               </div>
             </div>
           </div>

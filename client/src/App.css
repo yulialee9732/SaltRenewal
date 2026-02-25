@@ -275,3 +275,114 @@ select.form-control {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* ==========================================
+   GLOBAL MOBILE STYLES
+   ========================================== */
+
+/* Prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Mobile viewport fixes */
+@media (max-width: 768px) {
+  .App {
+    overflow-x: hidden;
+  }
+
+  /* Navbar padding adjustment */
+  .App > div:not(.landing-page) {
+    padding-top: 60px;
+  }
+
+  /* Container padding */
+  .container {
+    padding: 15px;
+  }
+
+  /* Better buttons on mobile */
+  .btn {
+    padding: 12px 20px;
+    font-size: 15px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Form improvements */
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-control {
+    padding: 12px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+
+  /* Modal mobile */
+  .modal {
+    width: 95%;
+    padding: 20px;
+    max-height: 85vh;
+  }
+
+  .modal-header {
+    font-size: 18px;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  /* Alert mobile */
+  .alert {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .App > div:not(.landing-page) {
+    padding-top: 55px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px 12px 0 0;
+    margin: 0;
+    position: fixed;
+    bottom: 0;
+    max-height: 90vh;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+  }
+}
+
+/* Touch action optimization */
+button, 
+a, 
+input[type="button"], 
+input[type="submit"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area padding for notched phones */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .App {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

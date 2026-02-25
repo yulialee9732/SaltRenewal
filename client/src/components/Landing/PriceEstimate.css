@@ -672,12 +672,34 @@
 }
 
 @media (max-width: 768px) {
+  .price-estimate-section {
+    padding: 40px 10px;
+  }
+
   .price-estimate-container {
     flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .left-info {
+    max-width: 100%;
+  }
+
+  .right-form {
+    width: 100%;
+  }
+
+  .camera-quantity-section {
+    grid-template-columns: 1fr;
   }
 
   .options-row {
     grid-template-columns: 1fr;
+  }
+
+  .options-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .consultation-form-container {
@@ -690,5 +712,26 @@
 
   .time-slots {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .form-left-summary {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+  }
+
+  .info-small {
+    font-size: 12px;
+  }
+
+  .info-large {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  .info-description {
+    font-size: 13px;
+    margin-bottom: 20px;
   }
 }

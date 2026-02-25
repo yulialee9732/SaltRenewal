@@ -78,6 +78,11 @@ html {
   animation: bounceIot 2s ease-in-out infinite;
 }
 
+/* Hide duplicate image on desktop */
+.main-iot-container .main-iot-image:nth-child(2) {
+  display: none;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -154,7 +159,16 @@ html {
 @media (max-width: 768px) {
   .main-text-container {
     width: 100%;
-    left: 3%;
+    left: 2%;
+  }
+  
+  .main-text-image {
+    width: 100%;
+  }
+  
+  .main-cam-container {
+    width: 60%;
+    max-width: none;
   }
   
   .main-display-container {
@@ -162,14 +176,42 @@ html {
   }
   
   .main-iot-container {
-    /* width: 45%; */
+    width: 400%;
     bottom: 5%;
+    display: flex;
+    gap: 5%;
+    left: 0;
+    transform: none;
+    animation: slideMarquee 15s linear infinite;
+  }
+  
+  .main-iot-container .main-iot-image {
+    width: 100%;
+    flex-shrink: 0;
+  }
+  
+  .main-iot-container .main-iot-image:nth-child(2) {
+    display: block;
+  }
+}
+
+@keyframes slideMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
 @media (max-width: 480px) {
   .main-text-container {
-    width: 90%;
+    width: 100%;
+    left: 0;
+  }
+  
+  .main-text-image {
+    width: 100%;
   }
 }
 
@@ -464,7 +506,7 @@ html {
   }
   
   .why-choose-title {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
   
   .why-choose-item-title {
@@ -476,14 +518,15 @@ html {
   }
   
   .customer-stats-section {
-    padding: 50px 20px;
+    padding: 30px 10px;
   }
   
   .customer-stats-text {
-    font-size: 1.2rem;
-    padding: 0 15px;
+    font-size: 1rem;
+    padding: 0 10px;
     flex-direction: column;
-    gap: 8px;
+    gap: 5px;
+    line-height: 1.4;
   }
   
   .stats-prefix {
@@ -492,10 +535,10 @@ html {
   }
   
   .customer-stats-number {
-    font-size: 2.2rem;
-    min-width: 140px;
-    padding: 4px 15px;
-    margin: 5px 0;
+    font-size: 1.8rem;
+    min-width: 120px;
+    padding: 2px 10px;
+    margin: 3px 0;
   }
   
   .stats-suffix {
@@ -899,26 +942,31 @@ html {
 
 @media (max-width: 768px) {
   .scheduling-section {
-    padding: 60px 20px;
+    padding: 40px 15px;
   }
   
   .scheduling-container {
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
   }
   
   .scheduling-image {
     flex: 1;
-    width: 100%;
+    width: 60%;
+    margin: 0 auto;
+  }
+  
+  .scheduling-image img {
+    max-width: 100%;
   }
   
   .scheduling-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
     text-align: center;
   }
   
   .scheduling-description {
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-align: center;
   }
 
@@ -963,7 +1011,7 @@ html {
 
 @media (max-width: 480px) {
   .scheduling-title {
-    font-size: 1.8rem;
+    /* font-size: 1.8rem; */
   }
   
   .scheduling-description {
@@ -1323,7 +1371,7 @@ html {
   }
   
   .packages-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
   
   .packages-subtitle {
@@ -1355,7 +1403,7 @@ html {
   }
   
   .resolution-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
   
   .resolution-subtitle {
@@ -1383,7 +1431,7 @@ html {
   }
   
   .installation-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
   
   .installation-description {
@@ -1395,7 +1443,7 @@ html {
   }
   
   .locations-title {
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
   
   .locations-subtitle {
@@ -1430,8 +1478,20 @@ html {
 }
 
 @media (max-width: 480px) {
+  .why-choose-title {
+    font-size: 1.3rem;
+  }
+
+  .scheduling-title {
+    font-size: 1.3rem;
+  }
+
+  .installation-title {
+    font-size: 1.3rem;
+  }
+
   .packages-title {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
   }
   
   .packages-subtitle {
@@ -1443,7 +1503,7 @@ html {
   }
   
   .resolution-title {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
   }
   
   .resolution-subtitle {
@@ -1464,7 +1524,7 @@ html {
   }
   
   .locations-title {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
   }
   
   .locations-subtitle {
@@ -1472,7 +1532,8 @@ html {
   }
   
   .location-cam-overlay {
-    width: 50px;
+    width: 100px;
+    top: -30px;
   }
   
   .location-text-overlay {

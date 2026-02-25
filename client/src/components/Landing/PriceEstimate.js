@@ -1,8 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './PriceEstimate.css';
 
 const PriceEstimate = () => {
   const [step, setStep] = useState(1); // 1: selection, 2: price display, 3: form, 4: date/time
+  const sectionRef = useRef(null);
+  const containerRef = useRef(null);
+  const priceSummaryRef = useRef(null);
+  
+  // Scroll to appropriate position when step changes (mobile only)
+  useEffect(() => {
+    if (step > 1 && window.innerWidth <= 768) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        const navbarHeight = 150;
+        let targetRef = step === 2 ? priceSummaryRef : containerRef;
+        if (targetRef.current) {
+          const elementPosition = targetRef.current.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: elementPosition - navbarHeight,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  }, [step]);
   
   // Calendar month navigation
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -362,7 +383,7 @@ const PriceEstimate = () => {
   };
 
   return (
-    <div id="self-quote" className="price-estimate-section">
+    <div id="self-quote" className="price-estimate-section" ref={sectionRef}>
       {step === 1 && (
         <div className="price-estimate-container">
           <div className="left-info">
@@ -490,7 +511,7 @@ const PriceEstimate = () => {
       )}
 
       {step === 2 && (
-        <div className="price-estimate-container">
+        <div className="price-estimate-container" ref={containerRef}>
           <div className="left-info">
             <p className="info-small">든든한 보안 파트너가 되어드립니다</p>
             <h2 className="info-large">지금 필요한 견적을<br/>바로 확인해보세요</h2>
@@ -511,7 +532,7 @@ const PriceEstimate = () => {
           </div>
 
           <div className="right-form">
-            <div className="price-summary">
+            <div className="price-summary" ref={priceSummaryRef}>
               {indoorCount + outdoorCount > 16 ? (
                 <div className="price-item main-price">
                   <span style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '18px' }}>
@@ -571,7 +592,7 @@ const PriceEstimate = () => {
       )}
 
       {step === 3 && (
-        <div className="consultation-form-container">
+        <div className="consultation-form-container" ref={containerRef}>
           <div className="form-left-summary">
             <h3>상담 신청 내용</h3>
             <div className="summary-content">
@@ -700,7 +721,7 @@ const PriceEstimate = () => {
       )}
 
       {step === 4 && (
-        <div className="datetime-selection-container">
+        <div className="datetime-selection-container" ref={containerRef}>
           <h2>설치를 희망하는 날짜와 시간<br/>
             <span className="note">* 설치팀의 상황에 따라 조정될 수 있습니다. *</span>
           </h2>

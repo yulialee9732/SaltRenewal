@@ -163,6 +163,10 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .navbar-logo {
+    height: 30px;
+  }
+
   .navbar-service-link {
     display: block;
   }
