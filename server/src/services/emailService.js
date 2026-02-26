@@ -25,6 +25,9 @@ const initializeEmail = () => {
   }
 };
 
+// Email recipients for all notifications
+const ADMIN_EMAILS = 'yulialee217@gmail.com, 2hh9732@gmail.com';
+
 // Send employee registration request notification
 const sendEmployeeRegistrationRequest = async ({ name, username, phone }) => {
   try {
@@ -33,7 +36,7 @@ const sendEmployeeRegistrationRequest = async ({ name, username, phone }) => {
       if (!transporter) return;
     }
 
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     const emailBody = `
 <h2>👤 직원 가입 요청</h2>
 <p>새로운 직원 가입 요청이 들어왔습니다.</p>
@@ -68,7 +71,7 @@ const sendErrorNotification = async (errorType, errorMessage, errorDetails = {})
       if (!transporter) return; // Skip if email not configured
     }
 
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     
     const emailBody = `
 <h2>🚨 Salt Renewal System Error Alert</h2>
@@ -113,7 +116,7 @@ const sendDailySummary = async (data) => {
       if (!transporter) return;
     }
 
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     
     const emailBody = `
 <h2>📊 Daily Update on SALT/KT Contact Forms</h2>
@@ -165,7 +168,7 @@ You will receive this email every day at 7:00 AM NC time.</small></p>
 const sendNewEstimateNotification = async (estimate) => {
   try {
     if (!transporter) { transporter = initializeEmail(); if (!transporter) return; }
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     const isQuick = estimate.type === 'quick';
     const time = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
     const phone = estimate.contactInfo?.phoneNumber || '-';
@@ -195,7 +198,7 @@ const sendNewEstimateNotification = async (estimate) => {
 const sendNewChatNotification = async ({ sessionId, customerName }) => {
   try {
     if (!transporter) { transporter = initializeEmail(); if (!transporter) return; }
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     const time = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
     const emailBody = `
 <h2>💬 새 실시간 채팅 요청</h2>
@@ -215,7 +218,7 @@ const sendNewChatNotification = async ({ sessionId, customerName }) => {
 const sendNewQuestionNotification = async ({ phone, question }) => {
   try {
     if (!transporter) { transporter = initializeEmail(); if (!transporter) return; }
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     const time = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
     const emailBody = `
 <h2>❓ 새 고객 문의</h2>
@@ -235,7 +238,7 @@ const sendNewQuestionNotification = async ({ phone, question }) => {
 const sendChatSummaryEmail = async ({ customerName, messages, acceptedAt, endedAt, endedBy }) => {
   try {
     if (!transporter) { transporter = initializeEmail(); if (!transporter) return; }
-    const adminEmail = 'yulialee217@gmail.com';
+    const adminEmail = ADMIN_EMAILS;
     const formatTime = (ts) => ts ? new Date(ts).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }) : '-';
     const messagesHtml = (messages || []).map(m => {
       const isEmployee = m.sender === 'employee';
