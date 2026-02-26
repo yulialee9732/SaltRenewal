@@ -310,16 +310,17 @@ html {
 }
 
 .price-chart-title {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2b2b2b;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .price-chart-subtitle {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #666;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
+  line-height: 1.6;
 }
 
 .price-chart-table-wrapper {
@@ -413,12 +414,12 @@ html {
   }
 
   .price-chart-title {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
 
   .price-chart-subtitle {
-    font-size: 0.9rem;
-    margin-bottom: 30px;
+    font-size: 1rem;
+    margin-bottom: 40px;
   }
 
   .price-chart-table th,
@@ -570,7 +571,7 @@ html {
   }
   
   .why-choose-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
   
   .why-choose-subtitle {
@@ -649,7 +650,7 @@ html {
   }
   
   .why-choose-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
   
   .why-choose-item-title {
@@ -1104,7 +1105,7 @@ html {
   }
   
   .scheduling-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     text-align: center;
   }
   
@@ -1154,7 +1155,7 @@ html {
 
 @media (max-width: 480px) {
   .scheduling-title {
-    /* font-size: 1.8rem; */
+    font-size: 1.5rem;
   }
   
   .scheduling-description {
@@ -1265,10 +1266,100 @@ html {
 .resolution-subtitle {
   font-size: 1.1rem;
   color: #666;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   line-height: 1.6;
 }
 
+.resolution-layout {
+  display: flex;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.resolution-options {
+  flex-shrink: 0;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.option-group:first-child {
+  padding-top: 0;
+}
+
+.option-group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.option-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  text-align: left;
+}
+
+.option-btn {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.option-btn:hover {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.option-btn.active {
+  background: #0099b0;
+  color: white;
+}
+
+.resolution-video-container {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.video-wrapper.large {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+}
+
+.video-wrapper.large iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Legacy resolution grid styles (kept for compatibility) */
 .resolution-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1403,7 +1494,7 @@ html {
 }
 
 .locations-title {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2b2b2b;
   margin-bottom: 15px;
@@ -1514,7 +1605,7 @@ html {
   }
   
   .packages-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
   }
   
   .packages-subtitle {
@@ -1546,12 +1637,66 @@ html {
   }
   
   .resolution-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
   }
   
   .resolution-subtitle {
     font-size: 1rem;
     margin-bottom: 40px;
+  }
+  
+  .resolution-layout {
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .resolution-options {
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .option-group {
+    flex: none;
+    width: 100%;
+    min-width: auto;
+    border-bottom: none;
+    border-right: none;
+    padding: 12px 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .option-group:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+  
+  .option-group:last-child {
+    border-right: none;
+    padding-bottom: 0;
+  }
+  
+  .option-label {
+    width: 55px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+  
+  .option-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .resolution-video-container {
+    flex: none;
+    width: 100%;
   }
   
   .resolution-grid {
@@ -1574,7 +1719,7 @@ html {
   }
   
   .installation-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
   }
   
   .installation-description {
@@ -1586,7 +1731,7 @@ html {
   }
   
   .locations-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
   }
   
   .locations-subtitle {
@@ -1630,15 +1775,15 @@ html {
   }
 
   .installation-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   .packages-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
   
   .packages-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   
   .package-item-title {
@@ -1646,11 +1791,21 @@ html {
   }
   
   .resolution-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
   
   .resolution-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+  
+  .option-label {
+    width: 50px;
+    font-size: 0.8rem;
+  }
+  
+  .option-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
   }
   
   .resolution-item-title {
@@ -1667,11 +1822,11 @@ html {
   }
   
   .locations-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
   
   .locations-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   
   .location-cam-overlay {
@@ -1696,6 +1851,924 @@ html {
   .location-back-content p {
     font-size: 0.85rem;
     line-height: 1.6;
+  }
+}
+
+/* Confidence Section - New Design */
+.confidence-section {
+  position: relative;
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #e8f4f8 0%, #f7fafb 50%, #f1f8f9 100%);
+  overflow: hidden;
+}
+
+.confidence-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 153, 176, 0.08) 0%, transparent 50%);
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.confidence-bg-image {
+  display: none;
+}
+
+.confidence-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.confidence-section .salt-logo-full {
+  height: 80px;
+  width: auto;
+  margin-bottom: 40px;
+}
+
+.confidence-title {
+  font-size: 3rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.confidence-subtitle {
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: #0099b0;
+  margin-bottom: 50px;
+  letter-spacing: 2px;
+}
+
+.confidence-message-box {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  padding: 50px 40px;
+  max-width: 750px;
+  margin: 0 auto;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.confidence-main-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333333;
+  line-height: 2;
+  margin-bottom: 30px;
+}
+
+.confidence-sub-text {
+  font-size: 1.1rem;
+  color: #555555;
+  line-height: 1.9;
+  margin-bottom: 35px;
+}
+
+.confidence-contact {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.contact-phone,
+.contact-hours {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.15rem;
+  color: #333333;
+  font-weight: 500;
+}
+
+.confidence-cta-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #0099b0 0%, #00c9e6 100%);
+  color: white;
+  text-decoration: none;
+  padding: 20px 70px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border-radius: 50px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 153, 176, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.confidence-cta-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.confidence-cta-btn:hover::before {
+  left: 100%;
+}
+
+.confidence-cta-btn:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 153, 176, 0.5);
+}
+
+.confidence-cta-btn {
+  cursor: pointer;
+  border: none;
+}
+
+/* Consultation Section */
+.consultation-section {
+  padding: 100px 20px 80px;
+  background: #ffffff;
+  scroll-margin-top: 50px;
+}
+
+.consultation-section-container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.consultation-form {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  padding: 50px 40px;
+  max-width: 750px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.consultation-form-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 35px;
+  text-align: center;
+}
+
+.consultation-form-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.consultation-form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.consultation-form-group input[type="text"],
+.consultation-form-group input[type="tel"],
+.consultation-form-group select {
+  width: 100%;
+  padding: 15px 18px;
+  font-size: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.consultation-form-group input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.consultation-form-group input:focus,
+.consultation-form-group select:focus {
+  outline: none;
+  border-color: #0099b0;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 15px rgba(0, 153, 176, 0.2);
+}
+
+.consultation-form-group select option {
+  background: #ffffff;
+  color: #333;
+}
+
+.radio-group {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.radio-label input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #0099b0;
+  cursor: pointer;
+}
+
+.radio-label span {
+  color: #333;
+  font-size: 1rem;
+}
+
+.consultation-form-group.checkbox-group {
+  margin-top: 30px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #0099b0;
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.consultation-submit-btn {
+  width: 100%;
+  padding: 18px;
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #0099b0 0%, #00c9e6 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 153, 176, 0.4);
+}
+
+.consultation-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 153, 176, 0.5);
+}
+
+@media (max-width: 768px) {
+  .consultation-section {
+    padding: 60px 20px;
+  }
+  
+  .consultation-form {
+    padding: 35px 25px;
+  }
+  
+  .consultation-form-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+  }
+  
+  .radio-group {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .consultation-section {
+    padding: 50px 15px;
+  }
+  
+  .consultation-form {
+    padding: 25px 18px;
+    border-radius: 18px;
+  }
+  
+  .consultation-form-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  
+  .consultation-form-group {
+    margin-bottom: 18px;
+  }
+  
+  .consultation-form-group input,
+  .consultation-form-group select {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+  
+  .radio-group {
+    gap: 15px;
+  }
+  
+  .consultation-submit-btn {
+    padding: 14px;
+    font-size: 1rem;
+  }
+}
+
+/* Who Needs Salt Section */
+.who-needs-section {
+  padding: 100px 20px;
+  background: #ffffff;
+}
+
+.who-needs-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.who-needs-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2b2b2b;
+  margin-bottom: 15px;
+}
+
+.who-needs-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 60px;
+  line-height: 1.6;
+}
+
+.who-needs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.who-needs-item {
+  background: white;
+  padding: 40px 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.who-needs-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 153, 176, 0.15);
+}
+
+.who-needs-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.who-needs-item p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Special Benefits Section */
+.special-benefits-section {
+  padding: 100px 20px;
+  background: #f8f9fa;
+}
+
+.special-benefits-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.special-benefits-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2b2b2b;
+  margin-bottom: 15px;
+}
+
+.special-benefits-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 60px;
+  line-height: 1.6;
+}
+
+.special-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.benefit-item {
+  background: white;
+  padding: 50px 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.benefit-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.benefit-number {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: #0099b0;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 153, 176, 0.4);
+}
+
+.benefit-image {
+  margin: 20px 0 30px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-image img {
+  width: 100%;
+  max-width: 250px;
+  max-height: 180px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.benefit-item h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2b2b2b;
+  margin: 0;
+}
+
+/* Consultation Needed Section */
+.consultation-needed-section {
+  padding: 100px 20px;
+  background: #fff;
+}
+
+.consultation-needed-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.consultation-needed-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2b2b2b;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.consultation-needed-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 60px;
+  line-height: 1.6;
+}
+
+.consultation-needed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.consultation-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.consultation-item:hover {
+  transform: translateX(10px);
+  box-shadow: 0 8px 30px rgba(0, 153, 176, 0.15);
+}
+
+.consultation-number {
+  flex-shrink: 0;
+  width: 45px;
+  height: 45px;
+  background: #0099b0;
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.consultation-item p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Inline Question Section */
+.inline-question-section {
+  padding: 80px 20px;
+  background: #f8f9fa;
+}
+
+.inline-question-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.inline-question-text {
+  flex: 1;
+  text-align: left;
+}
+
+.inline-question-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2b2b2b;
+  margin-bottom: 15px;
+}
+
+.inline-question-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.inline-question-form {
+  flex: 1;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.inline-question-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.inline-question-field {
+  text-align: left;
+}
+
+.inline-question-field label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.inline-question-field input,
+.inline-question-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.inline-question-field input:focus,
+.inline-question-field textarea:focus {
+  outline: none;
+  border-color: #0099b0;
+}
+
+.inline-question-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.inline-question-submit-btn {
+  background: #0099b0;
+  color: white;
+  border: none;
+  padding: 16px 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.inline-question-submit-btn:hover {
+  background: #007a8c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 153, 176, 0.35);
+}
+
+/* Responsive for new sections */
+@media (max-width: 1024px) {
+  .who-needs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .confidence-section {
+    padding: 70px 20px;
+  }
+  
+  .confidence-section .salt-logo-full {
+    height: 60px;
+    margin-bottom: 30px;
+  }
+  
+  .confidence-title {
+    font-size: 2rem;
+  }
+  
+  .confidence-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 35px;
+  }
+  
+  .confidence-message-box {
+    padding: 35px 25px;
+    border-radius: 18px;
+  }
+  
+  .confidence-main-text {
+    font-size: 1.2rem;
+  }
+  
+  .confidence-sub-text {
+    font-size: 1rem;
+  }
+  
+  .confidence-contact {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .confidence-cta-btn {
+    padding: 16px 50px;
+    font-size: 1.2rem;
+    border-radius: 40px;
+  }
+  
+  .who-needs-section {
+    padding: 60px 20px;
+  }
+  
+  .who-needs-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .who-needs-subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+  
+  .who-needs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .who-needs-item {
+    padding: 30px 20px;
+  }
+  
+  .who-needs-icon {
+    font-size: 2.5rem;
+  }
+  
+  .who-needs-item p {
+    font-size: 1rem;
+  }
+  
+  .special-benefits-section {
+    padding: 60px 20px;
+  }
+  
+  .special-benefits-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .special-benefits-subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+  
+  .special-benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .benefit-item {
+    padding: 40px 25px;
+  }
+  
+  .consultation-needed-section {
+    padding: 60px 20px;
+  }
+  
+  .consultation-needed-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .consultation-needed-subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+  
+  .consultation-item {
+    padding: 20px;
+  }
+  
+  .consultation-item p {
+    font-size: 1rem;
+  }
+  
+  .inline-question-section {
+    padding: 60px 20px;
+  }
+  
+  .inline-question-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .inline-question-text {
+    text-align: center;
+  }
+  
+  .inline-question-title {
+    font-size: 1.8rem;
+  }
+  
+  .inline-question-subtitle {
+    font-size: 1rem;
+  }
+  
+  .inline-question-form {
+    padding: 30px 25px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .confidence-section {
+    padding: 50px 15px;
+  }
+  
+  .confidence-section .salt-logo-full {
+    height: 50px;
+    margin-bottom: 25px;
+  }
+  
+  .confidence-title {
+    font-size: 1.6rem;
+  }
+  
+  .confidence-subtitle {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+  
+  .confidence-message-box {
+    padding: 25px 18px;
+  }
+  
+  .confidence-main-text {
+    font-size: 1.05rem;
+  }
+  
+  .confidence-sub-text {
+    font-size: 0.9rem;
+  }
+  
+  .contact-phone,
+  .contact-hours {
+    font-size: 0.95rem;
+  }
+  
+  .confidence-cta-btn {
+    padding: 14px 35px;
+    font-size: 1.05rem;
+  }
+  
+  .who-needs-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .who-needs-title {
+    font-size: 1.5rem;
+  }
+  
+  .who-needs-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .inline-question-section {
+    padding: 50px 15px;
+  }
+  
+  .inline-question-title {
+    font-size: 1.5rem;
+  }
+  
+  .inline-question-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .inline-question-form {
+    padding: 25px 20px;
+  }
+  
+  .inline-question-submit-btn {
+    width: 100%;
+    padding: 14px 30px;
+  }
+  
+  .special-benefits-title {
+    font-size: 1.5rem;
+  }
+  
+  .special-benefits-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .benefit-item h3 {
+    font-size: 1.2rem;
+  }
+  
+  .consultation-needed-title {
+    font-size: 1.5rem;
+  }
+  
+  .consultation-needed-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .consultation-item {
+    gap: 15px;
+  }
+  
+  .consultation-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  .consultation-item p {
+    font-size: 0.95rem;
   }
 }
 

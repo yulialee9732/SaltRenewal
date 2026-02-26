@@ -21,9 +21,74 @@ const LandingPage = () => {
   const [isCounterVisible, setIsCounterVisible] = useState(false);
   const counterRef = useRef(null);
   const chatMessagesRef = useRef(null);
+  
+  // Consultation form state
+  const [showConsultationForm, setShowConsultationForm] = useState(false);
+  const consultationFormRef = useRef(null);
+  const [consultationForm, setConsultationForm] = useState({
+    phoneNumber: '',
+    address: '',
+    indoorCount: 0,
+    outdoorCount: 0,
+    locationType: '',
+    hasInternet: '',
+    privacyConsent: false
+  });
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [showQuestionForm, setShowQuestionForm] = useState(false);
   const [questionForm, setQuestionForm] = useState({ phone: '', question: '' });
+  const [inlineQuestionForm, setInlineQuestionForm] = useState({ phone: '', question: '' });
+  
+  // Video selector state
+  const [selectedResolution, setSelectedResolution] = useState('500만화소');
+  const [selectedLocation, setSelectedLocation] = useState('헬스장');
+  const [selectedTimeOfDay, setSelectedTimeOfDay] = useState('낮');
+  
+  // Video data
+  const videoData = {
+    '500만화소': {
+      '헬스장': { '낮': 'ypYZr1a4Mwk', '밤': 'Dx-fb4bTFeU' },
+      '주택': { '낮': '-3GbjSR5n_M', '밤': 'g7VMVCY1WfQ' }
+    },
+    '210만화소': {
+      '카페': { '낮': '5VqmzfruI7Y', '밤': '3VG3Dg9GDfE' },
+      '주택': { '낮': '6nbWMGtOjKQ', '밤': 'R1bx48Kht0U' },
+      '매장': { '낮': 'mdsZIbqVAe4' },
+      '공장': { '낮': 'rU-4jML8goE' },
+      '키즈카페': { '밤': '9m3CiqjQ8OE' }
+    }
+  };
+
+  // Get available locations for selected resolution
+  const getLocations = () => Object.keys(videoData[selectedResolution] || {});
+  
+  // Get available times for selected resolution and location
+  const getTimes = () => Object.keys(videoData[selectedResolution]?.[selectedLocation] || {});
+  
+  // Get current video ID
+  const getCurrentVideoId = () => {
+    return videoData[selectedResolution]?.[selectedLocation]?.[selectedTimeOfDay] || 'ypYZr1a4Mwk';
+  };
+
+  // Handle resolution change - reset location and time
+  const handleResolutionChange = (resolution) => {
+    setSelectedResolution(resolution);
+    const locations = Object.keys(videoData[resolution] || {});
+    const firstLocation = locations[0] || '';
+    setSelectedLocation(firstLocation);
+    const times = Object.keys(videoData[resolution]?.[firstLocation] || {});
+    setSelectedTimeOfDay(times[0] || '낮');
+  };
+
+  // Handle location change - reset time if needed
+  const handleLocationChange = (location) => {
+    setSelectedLocation(location);
+    const times = Object.keys(videoData[selectedResolution]?.[location] || {});
+    if (!times.includes(selectedTimeOfDay)) {
+      setSelectedTimeOfDay(times[0] || '낮');
+    }
+  };
+
   const [chatStatus, setChatStatus] = useState(null); // null, 'pending', 'active', 'ended'
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
@@ -103,6 +168,27 @@ const LandingPage = () => {
       chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
+  // Handle hash navigation for consultation form
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#consultation-section') {
+        setShowConsultationForm(true);
+        setTimeout(() => {
+          if (consultationFormRef.current) {
+            consultationFormRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      }
+    };
+
+    // Check on initial load
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const timeSlots = {
     morning: ['8am', '8:30am', '9am', '9:30am', '10am', '10:30am', '11am', '11:30am'],
@@ -266,6 +352,13 @@ const LandingPage = () => {
     }));
   };
 
+  const handleConsultationQuantityChange = (field, delta) => {
+    setConsultationForm(prev => ({
+      ...prev,
+      [field]: Math.max(0, prev[field] + delta)
+    }));
+  };
+
   const isWithinChatHours = () => {
     // Allow localhost to bypass business hours check
     const hostname = window.location.hostname;
@@ -350,6 +443,38 @@ const LandingPage = () => {
     setShowQuestionForm(false);
   };
 
+  const handleInlineQuestionFormChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'phone') {
+      const formatted = formatPhoneNumber(value);
+      setInlineQuestionForm(prev => ({
+        ...prev,
+        [name]: formatted
+      }));
+    } else {
+      setInlineQuestionForm(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+
+  const handleInlineQuestionSubmit = (e) => {
+    e.preventDefault();
+    
+    // Send question to server - saves to MongoDB, Google Sheets, and sends email
+    notificationsAPI.newQuestion({ 
+      phone: inlineQuestionForm.phone, 
+      question: inlineQuestionForm.question 
+    }).catch(() => {});
+
+    // Show success message
+    alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+    
+    // Reset form
+    setInlineQuestionForm({ phone: '', question: '' });
+  };
+
   const handleChatSend = async () => {
     if (!chatInput.trim() || !chatSessionId || chatStatus !== 'active') return;
 
@@ -385,6 +510,83 @@ const LandingPage = () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleChatSend();
+    }
+  };
+
+  // Consultation form handlers
+  const handleConsultationClick = () => {
+    setShowConsultationForm(true);
+    setTimeout(() => {
+      if (consultationFormRef.current) {
+        consultationFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
+  const handleConsultationFormChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (name === 'phoneNumber') {
+      const formatted = formatPhoneNumber(value);
+      setConsultationForm(prev => ({ ...prev, [name]: formatted }));
+    } else {
+      setConsultationForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    }
+  };
+
+  const handleConsultationSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!consultationForm.phoneNumber || !consultationForm.address || 
+        (consultationForm.indoorCount === 0 && consultationForm.outdoorCount === 0) || 
+        !consultationForm.locationType || 
+        !consultationForm.hasInternet || !consultationForm.privacyConsent) {
+      alert('모든 필수 항목을 입력해주세요. (최소 1대 이상의 카메라를 선택하세요)');
+      return;
+    }
+
+    const formData = {
+      contactInfo: {
+        phoneNumber: consultationForm.phoneNumber,
+        address: consultationForm.address,
+        locationType: consultationForm.locationType,
+        hasInternet: consultationForm.hasInternet
+      },
+      currentSelection: {
+        indoorCount: consultationForm.indoorCount,
+        outdoorCount: consultationForm.outdoorCount
+      },
+      consultationRequest: true,
+      submittedAt: new Date().toISOString()
+    };
+
+    try {
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+      const response = await fetch(`${API_URL}/price-estimate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('상담 신청이 접수되었습니다! 빠른 시일 내에 연락드리겠습니다.');
+        setShowConsultationForm(false);
+        setConsultationForm({
+          phoneNumber: '',
+          address: '',
+          indoorCount: 0,
+          outdoorCount: 0,
+          locationType: '',
+          hasInternet: '',
+          privacyConsent: false
+        });
+      } else {
+        alert('상담 신청 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('상담 신청 중 오류가 발생했습니다.');
     }
   };
 
@@ -660,36 +862,67 @@ const LandingPage = () => {
 
       <div id="resolution-section" className="resolution-section">
         <div className="resolution-container">
-          <h2 className="resolution-title">화질 비교</h2>
-          <p className="resolution-subtitle">선명한 화질로 더욱 안전한 보안을 제공합니다</p>
+          <h2 className="resolution-title">실시간 영상 확인</h2>
+          <p className="resolution-subtitle">화소별, 장소별 실제 영상을 직접 확인해보세요</p>
           
-          <div className="resolution-grid">
-            <div className="resolution-item">
-              <h3 className="resolution-item-title">500만 화소</h3>
-              <div className="video-wrapper">
-                <iframe
-                  src="https://www.youtube.com/embed/ypYZr1a4Mwk"
-                  title="500만 화소"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+          <div className="resolution-layout">
+            {/* Options Panel */}
+            <div className="resolution-options">
+              <div className="option-group">
+                <h4 className="option-label">화소</h4>
+                <button 
+                  className={`option-btn ${selectedResolution === '500만화소' ? 'active' : ''}`}
+                  onClick={() => handleResolutionChange('500만화소')}
+                >
+                  500만화소
+                </button>
+                <button 
+                  className={`option-btn ${selectedResolution === '210만화소' ? 'active' : ''}`}
+                  onClick={() => handleResolutionChange('210만화소')}
+                >
+                  210만화소
+                </button>
               </div>
-              <p className="resolution-description">초고화질로 세밀한 부분까지 선명하게</p>
+
+              <div className="option-group">
+                <h4 className="option-label">장소</h4>
+                {getLocations().map(location => (
+                  <button 
+                    key={location}
+                    className={`option-btn ${selectedLocation === location ? 'active' : ''}`}
+                    onClick={() => handleLocationChange(location)}
+                  >
+                    {location}
+                  </button>
+                ))}
+              </div>
+
+              <div className="option-group">
+                <h4 className="option-label">시간대</h4>
+                {getTimes().map(time => (
+                  <button 
+                    key={time}
+                    className={`option-btn ${selectedTimeOfDay === time ? 'active' : ''}`}
+                    onClick={() => setSelectedTimeOfDay(time)}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
             </div>
-            
-            <div className="resolution-item">
-              <h3 className="resolution-item-title">210만 화소</h3>
-              <div className="video-wrapper">
+
+            {/* Video Display */}
+            <div className="resolution-video-container">
+              <div className="video-wrapper large">
                 <iframe
-                  src="https://www.youtube.com/embed/mdsZIbqVAe4"
-                  title="210만 화소"
+                  key={getCurrentVideoId()}
+                  src={`https://www.youtube.com/embed/${getCurrentVideoId()}`}
+                  title={`${selectedResolution} - ${selectedLocation} - ${selectedTimeOfDay}`}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               </div>
-              <p className="resolution-description">기본 화질로 경제적인 보안</p>
             </div>
           </div>
         </div>
@@ -784,6 +1017,253 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Confidence Section */}
+      <div className="confidence-section">
+        <div className="confidence-bg-image">
+          {/* Background image placeholder - add img/confidence-bg.jpg */}
+        </div>
+        <div className="confidence-container">
+          <img src={`${process.env.PUBLIC_URL}/img/logo/blue-whole.png`} alt="SALT 솔트 씨씨티비" className="salt-logo-full" />
+          <h2 className="confidence-title">고객님 저희가 최고 조건 자신합니다.</h2>
+          <h3 className="confidence-subtitle">비교해 주세요.</h3>
+          
+          <div className="confidence-message-box">
+            <p className="confidence-main-text">
+              제게 있어, 고객님과의 짧은 만남은<br />
+              단골 업체로 각인되기 위한 소중한 기회입니다.
+            </p>
+            <p className="confidence-sub-text">
+              상담하시는 5분이 정말 헛되지 않았구나 하실 겁니다.<br />
+              글 쓴 제가 궁금하다면 아래 상담 신청 부탁드립니다.
+            </p>
+            <div className="confidence-contact">
+              <span className="contact-phone">☎ 문의 1522-0687</span>
+              <span className="contact-hours">⏰ 상담 시간 9:00 ~ 18:00</span>
+            </div>
+            <button type="button" className="confidence-cta-btn" onClick={handleConsultationClick}>상담 신청</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Consultation Form Section */}
+      {showConsultationForm && (
+        <div id="consultation-section" className="consultation-section" ref={consultationFormRef}>
+          <div className="consultation-section-container">
+            <form className="consultation-form" onSubmit={handleConsultationSubmit}>
+              <h3 className="consultation-form-title">상담 신청서</h3>
+              
+              <div className="consultation-form-group">
+                <label>연락처 *</label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  value={consultationForm.phoneNumber}
+                  onChange={handleConsultationFormChange}
+                  placeholder="010-0000-0000"
+                  maxLength="13"
+                  required
+                />
+              </div>
+              
+              <div className="consultation-form-group">
+                <label>주소 *</label>
+                <input
+                  type="text"
+                  name="address"
+                  value={consultationForm.address}
+                  onChange={handleConsultationFormChange}
+                  placeholder="설치 주소를 입력해주세요"
+                  required
+                />
+              </div>
+              
+              <div className="consultation-form-group">
+                <label>실내 카메라 *</label>
+                <div className="quantity-control">
+                  <button type="button" className="qty-btn" onClick={() => handleConsultationQuantityChange('indoorCount', -1)}>−</button>
+                  <span className="qty-value">{consultationForm.indoorCount}</span>
+                  <button type="button" className="qty-btn" onClick={() => handleConsultationQuantityChange('indoorCount', 1)}>+</button>
+                </div>
+              </div>
+              
+              <div className="consultation-form-group">
+                <label>실외 카메라 *</label>
+                <div className="quantity-control">
+                  <button type="button" className="qty-btn" onClick={() => handleConsultationQuantityChange('outdoorCount', -1)}>−</button>
+                  <span className="qty-value">{consultationForm.outdoorCount}</span>
+                  <button type="button" className="qty-btn" onClick={() => handleConsultationQuantityChange('outdoorCount', 1)}>+</button>
+                </div>
+              </div>
+              
+              <div className="consultation-form-group">
+                <label>장소 타입 *</label>
+                <input
+                  type="text"
+                  name="locationType"
+                  value={consultationForm.locationType}
+                  onChange={handleConsultationFormChange}
+                  placeholder="예: 주택, 매장, 사무실, 창고 등"
+                  required
+                />
+              </div>
+              
+              <div className="consultation-form-group">
+                <label>현장에 인터넷이 있나요? *</label>
+                <input
+                  type="text"
+                  name="hasInternet"
+                  value={consultationForm.hasInternet}
+                  onChange={handleConsultationFormChange}
+                  placeholder="있음 / 없음 / CCTV와 함께 설치 예정"
+                  required
+                />
+              </div>
+              
+              <div className="consultation-form-group checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="privacyConsent"
+                    checked={consultationForm.privacyConsent}
+                    onChange={handleConsultationFormChange}
+                    required
+                  />
+                  <span>개인정보 수집 및 이용에 동의합니다 *</span>
+                </label>
+              </div>
+              
+              <button type="submit" className="consultation-submit-btn">상담 신청하기</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Who Needs Salt Section */}
+      <div className="who-needs-section">
+        <div className="who-needs-container">
+          <h2 className="who-needs-title">이런 분들께 솔트가 꼭! 필요해요</h2>
+          <p className="who-needs-subtitle">고객님의 니즈에 딱 맞는 맞춤형 상담을 제공합니다</p>
+          <div className="who-needs-grid">
+            <div className="who-needs-item">
+              <div className="who-needs-icon">🔍</div>
+              <p>CCTV 상담 여러군데 비교해 봤다</p>
+            </div>
+            <div className="who-needs-item">
+              <div className="who-needs-icon">🏢</div>
+              <p>소규모가 아닌 대형업체를 원한다</p>
+            </div>
+            <div className="who-needs-item">
+              <div className="who-needs-icon">🤝</div>
+              <p>상담에서 마무리까지 챙겨주길 원한다</p>
+            </div>
+            <div className="who-needs-item">
+              <div className="who-needs-icon">🎯</div>
+              <p>내게 딱! 맞는 상품 꼭! 찝어줄 사람 원한다</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Special Benefits Section */}
+      <div className="special-benefits-section">
+        <div className="special-benefits-container">
+          <h2 className="special-benefits-title">솔트의 특별 혜택</h2>
+          <p className="special-benefits-subtitle">솔트만의 특별한 서비스로 고객님을 모십니다</p>
+          <div className="special-benefits-grid">
+            <div className="benefit-item">
+              <div className="benefit-number">1</div>
+              <div className="benefit-image">
+                <img src={`${process.env.PUBLIC_URL}/img/whyspecial/1.png`} alt="지구 최저가 요금 설계" />
+              </div>
+              <h3>지구 최저가 요금 설계</h3>
+            </div>
+            <div className="benefit-item">
+              <div className="benefit-number">2</div>
+              <div className="benefit-image">
+                <img src={`${process.env.PUBLIC_URL}/img/whyspecial/2.png`} alt="우주 최고 품질" />
+              </div>
+              <h3>우주 최고 품질</h3>
+            </div>
+            <div className="benefit-item">
+              <div className="benefit-number">3</div>
+              <div className="benefit-image">
+                <img src={`${process.env.PUBLIC_URL}/img/whyspecial/3.png`} alt="1:1 담당 상담원 매칭" />
+              </div>
+              <h3>1:1 담당 상담원 매칭</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Consultation Needed Section */}
+      <div className="consultation-needed-section">
+        <div className="consultation-needed-container">
+          <h2 className="consultation-needed-title">상담이 꼭! 필요하신 분</h2>
+          <p className="consultation-needed-subtitle">전문 상담원이 친절하게 안내해 드립니다</p>
+          <div className="consultation-needed-list">
+            <div className="consultation-item">
+              <div className="consultation-number">1</div>
+              <p>CCTV 상담 2군데 이상 전화 해보신 분</p>
+            </div>
+            <div className="consultation-item">
+              <div className="consultation-number">2</div>
+              <p>상담 후에 나몰라라하지 않고 끝까지 챙겨주고, 잘해주는 곳 찾고 계신 분</p>
+            </div>
+            <div className="consultation-item">
+              <div className="consultation-number">3</div>
+              <p>최고 품질 CCTV와 최저 요금 두 마리 토끼 다 잡기를 원하시는 분</p>
+            </div>
+            <div className="consultation-item">
+              <div className="consultation-number">4</div>
+              <p>CCTV 상담 후 처리가 엉망이어서 곤란했던 경험이 있으신 분</p>
+            </div>
+            <div className="consultation-item">
+              <div className="consultation-number">5</div>
+              <p>기술적인 면 꿰뚫고 있는 전문 상담원과 상담 원하시는 분</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Inline Question Section */}
+      <div className="inline-question-section">
+        <div className="inline-question-container">
+          <div className="inline-question-text">
+            <h2 className="inline-question-title">궁금한 점이 있으신가요?</h2>
+            <p className="inline-question-subtitle">전화번호와 질문을 남겨주시면 빠르게 답변드리겠습니다</p>
+          </div>
+          <form onSubmit={handleInlineQuestionSubmit} className="inline-question-form">
+            <div className="inline-question-fields">
+              <div className="inline-question-field">
+                <label>연락처 *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={inlineQuestionForm.phone}
+                  onChange={handleInlineQuestionFormChange}
+                  placeholder="010-0000-0000"
+                  required
+                />
+              </div>
+              <div className="inline-question-field">
+                <label>질문 내용 *</label>
+                <textarea
+                  name="question"
+                  value={inlineQuestionForm.question}
+                  onChange={handleInlineQuestionFormChange}
+                  placeholder="궁금하신 내용을 자유롭게 작성해주세요"
+                  rows="4"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" className="inline-question-submit-btn">
+              질문 보내기
+            </button>
+          </form>
         </div>
       </div>
 

@@ -88,6 +88,9 @@ const Navbar = () => {
           <a href="#self-quote" className="navbar-service-link" onClick={handleMenuClick}>
             셀프 견적확인
           </a>
+          <a href="#consultation-section" className="navbar-service-link" onClick={handleMenuClick}>
+            상담 신청
+          </a>
           {isAuthenticated ? (
             <>
               <span className="navbar-user">{user?.name}님</span>
