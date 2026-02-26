@@ -535,7 +535,7 @@ const LandingPage = () => {
           <div className="price-chart-notes">
             <div className="price-note-item included">
               <span className="note-icon">✓</span>
-              <span>사용 기간 내 출장 A/S 무료</span>
+              <span>사용 기간 내 기기가 고장 났을 시 출장 A/S 무료</span>
             </div>
             <div className="price-note-item included">
               <span className="note-icon">✓</span>
