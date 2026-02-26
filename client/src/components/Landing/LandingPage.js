@@ -504,6 +504,50 @@ const LandingPage = () => {
           <p className="scroll-text">스크롤 하세요</p>
         </div>
       </div>
+
+      {/* Price Chart Section */}
+      <div className="price-chart-section">
+        <div className="price-chart-container">
+          <h2 className="price-chart-title">210만화소 CCTV 월 이용료</h2>
+          <p className="price-chart-subtitle">3년 약정 렌탈 · 기본 설치비 포함 · 부가세 별도</p>
+          
+          <div className="price-chart-table-wrapper">
+            <table className="price-chart-table">
+              <thead>
+                <tr>
+                  <th>카메라 수</th>
+                  <th>월 이용료</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>2대</td><td>22,000원</td></tr>
+                <tr><td>3대</td><td>26,000원</td></tr>
+                <tr><td>4대</td><td>30,000원</td></tr>
+                <tr><td>5대</td><td>36,000원</td></tr>
+                <tr><td>6대</td><td>40,000원</td></tr>
+                <tr><td>7대</td><td>44,000원</td></tr>
+                <tr><td>8대</td><td>48,000원</td></tr>
+                <tr className="contact-row"><td>9대 이상</td><td>상담 문의</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="price-chart-notes">
+            <div className="price-note-item included">
+              <span className="note-icon">✓</span>
+              <span>사용 기간 내 출장 A/S 무료</span>
+            </div>
+            <div className="price-note-item included">
+              <span className="note-icon">✓</span>
+              <span>기본 설치비 포함</span>
+            </div>
+            <div className="price-note-item extra">
+              <span className="note-icon">※</span>
+              <span>특수 공사 시 설치비 별도 (엘리베이터 공사, 층고 4m 이상, 특수 배관, 폴대 설치, 탑차 필요 시)</span>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div className="why-choose-section">
         <div className="why-choose-container">

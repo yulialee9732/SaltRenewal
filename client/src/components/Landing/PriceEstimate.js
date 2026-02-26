@@ -63,7 +63,7 @@ const PriceEstimate = () => {
     { id: 'elevator', name: '엘리베이터 공사', image: '/img/price-est/special/elevator.png' },
     { id: 'pipe', name: '특수 배관 공사', image: '/img/price-est/special/wire.png' },
     { id: 'pole', name: '폴대 (SUS)', image: '/img/price-est/special/sus.png' },
-    { id: 'sky', name: '타차 (스카이어, 탑차)', image: '/img/price-est/special/sky.png' }
+    { id: 'sky', name: '탑차 (스카이차, 탑차)', image: '/img/price-est/special/sky.png' }
   ];
 
   const timeSlots = {
