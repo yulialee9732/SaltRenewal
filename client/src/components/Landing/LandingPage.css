@@ -260,6 +260,7 @@ html {
     font-size: 11px;
     padding: 5px 10px;
     top: -30px;
+    background-color: #0099b0;
   }
   
   .scroll-indicator {
@@ -279,6 +280,7 @@ html {
 @media (max-width: 480px) {
   .main-hero-title{
     top: 100px !important;
+    transform: translateX(-50%);
   }
   .main-hero-title p {
     font-size: 1.1rem !important;
