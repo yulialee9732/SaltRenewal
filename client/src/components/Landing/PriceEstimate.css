@@ -4,6 +4,8 @@
   padding: 80px 5%;
   background: #f8f9fa;
   scroll-margin-top: 80px;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* Step 1 - Initial Selection */
@@ -13,6 +15,8 @@
   max-width: 1200px;
   margin: 0 auto;
   align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .left-info {
@@ -78,6 +82,7 @@
   border-radius: 30px;
   border: 1px solid #E5E5E5;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
 }
 
 .camera-type-section h3 {
@@ -117,6 +122,7 @@
   border-radius: 30px;
   padding: 10px 20px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
 }
 
 .camera-header {
@@ -195,6 +201,7 @@
   cursor: pointer;
   transition: all 0.3s;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .option-box.selected {
@@ -372,6 +379,8 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 50px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .form-left-summary {
@@ -425,6 +434,8 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-field label {
@@ -440,6 +451,8 @@
   border: 1px solid #E5E5E5;
   border-radius: 10px;
   font-size: 14px;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .radio-options {
@@ -671,36 +684,63 @@
 @media (max-width: 768px) {
   .price-estimate-section {
     padding: 40px 10px;
+    overflow-x: hidden;
   }
 
   .price-estimate-container {
     flex-direction: column;
     width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
   }
 
   .left-info {
     max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .right-form {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 20px 15px;
   }
 
   .camera-quantity-section {
     grid-template-columns: 1fr;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .camera-box {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .options-row {
     grid-template-columns: 1fr;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .options-grid {
     grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .option-box {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .consultation-form-container {
     grid-template-columns: 1fr;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 15px;
   }
 
   .datetime-content {
@@ -716,19 +756,37 @@
     padding-right: 0;
     border-bottom: 2px solid #eee;
     padding-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-right-inputs {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .info-small {
-    font-size: 12px;
+    font-size: 1rem;
+    text-align: center;
   }
 
   .info-large {
-    font-size: 22px;
+    font-size: 1.8rem;
     margin-bottom: 12px;
+    text-align: center;
   }
 
   .info-description {
-    font-size: 13px;
+    font-size: 1rem;
     margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .contact-info {
+    align-items: center;
+  }
+
+  .contact-item {
+    justify-content: center;
   }
 }

@@ -678,9 +678,9 @@ const LandingPage = () => {
         <div className="hero-content">
           {/* Main Title - center */}
           <div className="main-hero-title">
-            <p>• 기본 공사 무료 설치 <br className="mobile-br" /> • 사용 기간 내 출장 A/S 무료<br className="mobile-br" /> • 36개월 약정<br className="mobile-br" /> • 렌탈형</p>
-            <h1><span>카메라 4대</span>를 <br className="mobile-br" /><span>월 33,000원</span>에 <br className="mobile-br" /><span></span>이용하세요!</h1>
-            <h2>상담 문의 1522-0687</h2>
+            <p>• 기본 공사 무료 설치 <br className="mobile-br" /> • 사용 기간 내 출장 A/S 무료<br className="mobile-br" /> • 36개월 약정• 렌탈형</p>
+            <h1><span>카메라 4대</span>를 <br className="mobile-br" /><span>월 33,000원</span>에 <br className="mobile-br" />이용하세요!</h1>
+            <p className="phone-text">상담 문의 1522-0687</p>
           </div>
           
           {/* Display - bottom center */}
