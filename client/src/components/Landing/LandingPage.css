@@ -253,8 +253,8 @@ html {
   }
   
   .camera-wrapper {
-    width: 80%;
-    max-width: 300px;
+    width: 100%;
+    max-width: 400px;
   }
   
   .camera-tooltip {
@@ -280,7 +280,7 @@ html {
 
 @media (max-width: 480px) {
   .main-hero-title{
-    top: 90px !important;
+    top: 80px !important;
     transform: translateX(-50%);
   }
   .main-hero-title p {
@@ -296,7 +296,7 @@ html {
   }
   
   .main-cameras-container {
-    width: 70%;
+    width: 60%;
     top: 45%;
   }
   
