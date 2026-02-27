@@ -297,7 +297,8 @@ html {
   
   .main-cameras-container {
     width: 50%;
-    top: 65%;
+    top: 50%;
+    padding-bottom: 30px;
   }
   
   .camera-wrapper {
