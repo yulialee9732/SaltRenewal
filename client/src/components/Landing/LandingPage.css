@@ -40,7 +40,6 @@ html {
   text-align: center;
   z-index: 10;
   width: 90%;
-  background-color: #006070;
 }
 
 .main-hero-title .mobile-br {
@@ -209,7 +208,7 @@ html {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .main-hero-title{
-    top: 250px !important;
+    top: 300px !important;
   }
   .main-hero-title .mobile-br {
     display: block;
@@ -220,7 +219,7 @@ html {
   }
   
   .main-hero-title h1 {
-    font-size: 1rem !important;
+    font-size: 2rem !important;
   }
   
   .main-hero-title h1 span {
