@@ -124,7 +124,6 @@ html {
   top: -40px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #0099b0;
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
@@ -278,9 +277,11 @@ html {
 }
 
 @media (max-width: 480px) {
+  .main-hero-title{
+    top: 150px !important;
+  }
   .main-hero-title p {
     font-size: 1.1rem !important;
-    top: 150px !important;
   }
   
   .main-hero-title h1 {
