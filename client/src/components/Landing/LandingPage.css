@@ -31,56 +31,107 @@ html {
   overflow: hidden;
 }
 
-/* Main text - center left */
-.main-text-container {
+/* Main hero title - center */
+.main-hero-title {
   position: absolute;
-  left: 10%;
-  top: 50%;
-  transform: translateY(-50%);
-  max-width: 1100px;
-  width: 1000px;
-  z-index: 4;
-  animation: fadeInLeft 0.8s ease-out;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  width: 90%;
 }
 
-/* Camera - top right corner */
-.main-cam-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40%;
-  max-width: 800px;
-  z-index: 3;
-  animation: fadeInRight 0.8s ease-out 0.2s both;
+.main-hero-title .mobile-br {
+  display: none;
 }
 
-/* Display - bottom center, 80% width */
+.main-hero-title p {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.main-hero-title h1 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.main-hero-title h1 span {
+  color: #0099b0;
+  font-weight: 700;
+  font-size: 4rem;
+}
+
+.main-hero-title h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin-top: 1rem;
+}
+
+/* Display - bottom center, 100% width */
 .main-display-container {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
-  max-width: 1200px;
+  width: 100%;
   z-index: 1;
   animation: fadeInUpCentered 0.8s ease-out 0.4s both;
 }
 
-/* IoT - on top of display */
-.main-iot-container {
+/* Cameras - on top of display */
+.main-cameras-container {
   position: absolute;
-  bottom: 8%;
+  bottom: 20%;
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
   max-width: 1000px;
   z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   animation: bounceIot 2s ease-in-out infinite;
 }
 
-/* Hide duplicate image on desktop */
-.main-iot-container .main-iot-image:nth-child(2) {
-  display: none;
+.camera-wrapper {
+  position: relative;
+  width: 45%;
+  max-width: 400px;
+}
+
+.main-camera-left,
+.main-camera-right {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.camera-wrapper:hover .main-camera-left,
+.camera-wrapper:hover .main-camera-right {
+  transform: scale(1.05);
+}
+
+.camera-tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0099b0;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 10;
 }
 
 @keyframes fadeInUp {
@@ -147,9 +198,8 @@ html {
 
 /* Ensure all images are responsive */
 .main-text-image,
-.main-cam-image,
-.main-display-image,
-.main-iot-image {
+.main-display-image
+{
   width: 100%;
   height: auto;
   display: block;
@@ -157,13 +207,29 @@ html {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .main-hero-title .mobile-br {
+    display: block;
+  }
+  
+  .main-hero-title p {
+    font-size: 1.3rem;
+  }
+  
+  .main-hero-title h1 {
+    font-size: 1rem;
+  }
+  
+  .main-hero-title h1 span {
+    font-size: 2.6rem;
+  }
+  
+  .main-hero-title h2 {
+    font-size: 1.3rem;
+  }
+  
   .main-text-container {
     width: 100%;
     left: 2%;
-  }
-  
-  .main-text-image {
-    width: 100%;
   }
   
   .main-cam-container {
@@ -172,26 +238,26 @@ html {
   }
   
   .main-display-container {
-    width: 90%;
+    display: none;
   }
   
-  .main-iot-container {
-    width: 400%;
-    bottom: 5%;
-    display: flex;
-    gap: 5%;
-    left: 0;
-    transform: none;
-    animation: slideMarquee 15s linear infinite;
+  .main-cameras-container {
+    width: 60%;
+    bottom: 10%;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
   
-  .main-iot-container .main-iot-image {
-    width: 100%;
-    flex-shrink: 0;
+  .camera-wrapper {
+    width: 80%;
+    max-width: 300px;
   }
   
-  .main-iot-container .main-iot-image:nth-child(2) {
-    display: block;
+  .camera-tooltip {
+    font-size: 11px;
+    padding: 5px 10px;
+    top: -30px;
   }
 }
 
@@ -205,13 +271,29 @@ html {
 }
 
 @media (max-width: 480px) {
-  .main-text-container {
-    width: 100%;
-    left: 0;
+  .main-hero-title p {
+    font-size: 0.8rem;
   }
   
-  .main-text-image {
-    width: 100%;
+  .main-hero-title h1 {
+    font-size: 1rem;
+  }
+  
+  .main-hero-title h1 span {
+    font-size: 1.6rem;
+  }
+  
+  .main-hero-title h2 {
+    font-size: 0.8rem;
+  }
+  .main-cameras-container {
+    width: 70%;
+    bottom: 8%;
+  }
+  
+  .camera-wrapper {
+    width: 90%;
+    max-width: 250px;
   }
 }
 

@@ -13,22 +13,22 @@
 .navbar-transparent {
   background-color: transparent;
   box-shadow: none;
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
 
 .navbar-transparent .navbar-brand {
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  color: #0099b0;
+  text-shadow: none;
 }
 
 .navbar-transparent .navbar-brand span {
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  color: #0099b0;
+  text-shadow: none;
 }
 
 .navbar-transparent .navbar-user {
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  color: #333;
+  text-shadow: none;
 }
 
 .navbar-scrolled {
@@ -222,7 +222,7 @@
 }
 
 .navbar-transparent .hamburger span {
-  background-color: #fff;
+  background-color: #424242;
 }
 
 .navbar-scrolled .hamburger span {

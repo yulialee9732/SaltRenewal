@@ -669,21 +669,18 @@ const LandingPage = () => {
   };
 
   const heroStyle = {
-    backgroundImage: `url(${process.env.PUBLIC_URL}/img/main-page/main-poster-bg.png)`
+    backgroundColor: '#e1e1e1'
   };
 
   return (
     <div className="landing-page">
       <div id="hero-section" className="hero-section" style={heroStyle}>
         <div className="hero-content">
-          {/* Main text - center left */}
-          <div className="main-text-container">
-            <img src={`${process.env.PUBLIC_URL}/img/main-page/main-text.png`} alt="SALT CCTV" className="main-text-image" />
-          </div>
-          
-          {/* Camera - top right corner */}
-          <div className="main-cam-container">
-            <img src={`${process.env.PUBLIC_URL}/img/main-page/main-cam.png`} alt="Camera" className="main-cam-image" />
+          {/* Main Title - center */}
+          <div className="main-hero-title">
+            <p>• 기본 공사 무료 설치 <br className="mobile-br" /> • 사용 기간 내 출장 A/S 무료<br className="mobile-br" /> • 36개월 약정<br className="mobile-br" /> • 렌탈형</p>
+            <h1><span>카메라 4대</span>를 <br className="mobile-br" /><span>월 33,000원</span>에 <br className="mobile-br" /><span></span>이용하세요!</h1>
+            <h2>상담 문의 1522-0687</h2>
           </div>
           
           {/* Display - bottom center */}
@@ -691,10 +688,16 @@ const LandingPage = () => {
             <img src={`${process.env.PUBLIC_URL}/img/main-page/main-display.png`} alt="Display" className="main-display-image" />
           </div>
           
-          {/* IoT - on top of display */}
-          <div className="main-iot-container">
-            <img src={`${process.env.PUBLIC_URL}/img/main-page/main-iot.png`} alt="IoT" className="main-iot-image" />
-            <img src={`${process.env.PUBLIC_URL}/img/main-page/main-iot.png`} alt="IoT" className="main-iot-image" />
+          {/* Cameras - on top of display */}
+          <div className="main-cameras-container">
+            <div className="camera-wrapper">
+              <span className="camera-tooltip">500만화소 라인</span>
+              <img src={`${process.env.PUBLIC_URL}/img/main-page/500.png`} alt="500만화소" className="main-camera-left" />
+            </div>
+            <div className="camera-wrapper">
+              <span className="camera-tooltip">210만화소 라인</span>
+              <img src={`${process.env.PUBLIC_URL}/img/main-page/210.png`} alt="210만화소" className="main-camera-right" />
+            </div>
           </div>
         </div>
         <div className="scroll-indicator" onClick={scrollToContent}>
@@ -759,12 +762,12 @@ const LandingPage = () => {
           <div className="why-choose-grid">
             <div className="why-choose-item">
               <div className="why-choose-icon">
-                <img src={`${process.env.PUBLIC_URL}/img/gd-thng/fivestarts.png`} alt="5성급 서비스" />
+                <img src={`${process.env.PUBLIC_URL}/img/gd-thng/fivestarts.png`} alt="초기비용 제로" />
               </div>
-              <h3 className="why-choose-item-title">최고 품질의 서비스</h3>
+              <h3 className="why-choose-item-title">초기비용 제로</h3>
               <p className="why-choose-item-description">
-                업계 최고 수준의 장비와 기술력으로<br />
-                고객님께 5성급 보안 서비스를 제공합니다
+                난공사가 포함되지 않은 기본공사는<br />
+                설치비가 발생되지 않습니다.
               </p>
             </div>
             

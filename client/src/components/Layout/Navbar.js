@@ -56,9 +56,7 @@ const Navbar = () => {
     ? `navbar ${scrolled ? 'navbar-scrolled' : 'navbar-transparent'}` 
     : 'navbar';
 
-  const logoSrc = isLandingPage && !scrolled 
-    ? `${process.env.PUBLIC_URL}/img/logo/nav-logo-white.png`
-    : `${process.env.PUBLIC_URL}/img/logo/nav-logo-blue.png`;
+  const logoSrc = `${process.env.PUBLIC_URL}/img/logo/nav-logo-blue.png`;
 
   return (
     <nav className={navbarClass}>
