@@ -209,7 +209,7 @@ html {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .main-hero-title{
-    top: 150px !important;
+    top: 250px !important;
   }
   .main-hero-title .mobile-br {
     display: block;
