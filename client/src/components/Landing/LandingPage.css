@@ -212,14 +212,15 @@ html {
   
   .main-hero-title p {
     font-size: 18px !important;
-    line-height: 20px;
+    line-height: 30px;
   }
   
   .main-hero-title h1 {
-    font-size: 1.5rem !important;
+    font-size: 2rem !important;
+    margin: 40px 0;
   }
    .main-hero-title h1 span{
-    font-size: 2rem !important;
+    font-size: 2.5rem !important;
   }
   
   .main-hero-title .phone-text {
@@ -232,7 +233,7 @@ html {
   }
   
   .main-cam-container {
-    width: 60%;
+    width: 70%;
     max-width: none;
   }
   
@@ -263,7 +264,31 @@ html {
     display: none;
   }
 }
-
+@media (max-width: 480px){
+.main-hero-title{
+    top: 200px;
+  }
+  .main-hero-title .mobile-br {
+    display: block;
+  }
+  
+  .main-hero-title p {
+    font-size: 18px !important;
+    line-height: 25px;
+  }
+  
+  .main-hero-title h1 {
+    font-size: 1.5rem !important;
+    margin: 20px 0;
+  }
+   .main-hero-title h1 span{
+    font-size: 2rem !important;
+  }
+  
+  .main-hero-title .phone-text {
+    font-size: 18px !important;
+  }
+}
 @keyframes slideMarquee {
   0% {
     transform: translateX(0);
