@@ -678,7 +678,7 @@ const LandingPage = () => {
         <div className="hero-content">
           {/* Main Title - center */}
           <div className="main-hero-title">
-            <p>• 기본 공사 무료 설치<br className="mobile-br" /> • 사용 기간 내 출장 A/S 무료<br className="mobile-br" /> • 36개월 약정 • 렌탈형</p>
+            <p>• 기본 공사 무료 설치<br className="mobile-br" /> • 고장 시 출장 A/S 무료<br className="mobile-br" /> • 36개월 약정 • 렌탈형</p>
             <h1><span>카메라 4대</span>를 <br className="mobile-br" /><span>월 33,000원</span>에 이용하세요!</h1>
             <h2>상담 문의 1522-0687</h2>
           </div>
@@ -788,7 +788,7 @@ const LandingPage = () => {
               </div>
               <h3 className="why-choose-item-title">평생 안심 고객 지원</h3>
               <p className="why-choose-item-description">
-                사용 기간 내에 무료 유지보수<br />
+                고장 시 무료 유지보수<br />
                 고객 지원 센터: 오전 10시 ~ 오후 6시 (월~금)
               </p>
             </div>
