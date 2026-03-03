@@ -11,6 +11,8 @@ const initializeEmail = async () => {
     const EMAIL_USER = process.env.EMAIL_USER;
     const EMAIL_PASS = process.env.EMAIL_PASS;
     
+    console.log('📧 Email config check:', EMAIL_USER ? 'USER found' : 'USER missing', EMAIL_PASS ? 'PASS found' : 'PASS missing');
+    
     if (!EMAIL_USER || !EMAIL_PASS) {
       console.warn('⚠️  Email credentials not configured. Email notifications disabled.');
       return null;
@@ -18,15 +20,12 @@ const initializeEmail = async () => {
     
     transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // use TLS
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASS
-      },
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 15000
+      }
     });
     
     console.log('✅ Email service initialized');
@@ -133,14 +132,15 @@ const sendFormNotification = async (formData) => {
       </div>
     `;
     
-    await transporter.sendMail({
+    console.log('📧 Attempting to send form notification email...');
+    const result = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: NOTIFICATION_EMAILS.join(', '),
       subject,
       html
     });
     
-    console.log(`✅ Email notification sent for ${formType}`);
+    console.log(`✅ Email notification sent for ${formType}, messageId: ${result.messageId}`);
   } catch (error) {
     console.error('❌ Error sending email notification:', error.message);
   }
