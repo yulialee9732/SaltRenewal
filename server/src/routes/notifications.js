@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// Email service removed - paths preserved:
-// const { sendNewChatNotification, sendNewQuestionNotification, sendChatSummaryEmail } = require('../services/emailService');
+const { sendQuestionNotification } = require('../services/emailService');
 const { addCustomerQuestion, updateQuestionReadStatus, deleteCustomerQuestion } = require('../services/googleSheets');
 const Question = require('../models/Question');
 const Chat = require('../models/Chat');
@@ -213,6 +212,10 @@ router.post('/question', async (req, res) => {
       ipAddress,
       mongoId: savedQuestion._id.toString()
     }).catch(err => console.error('Google Sheets error:', err));
+    
+    // 3. Send email notification
+    sendQuestionNotification({ phone, question })
+      .catch(err => console.error('Email notification error:', err));
     
     res.json({ success: true, question: savedQuestion });
   } catch (error) {
