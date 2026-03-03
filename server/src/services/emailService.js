@@ -19,12 +19,13 @@ const initializeEmail = async () => {
     }
     
     transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, // use SSL
+      service: 'gmail',
       auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
     

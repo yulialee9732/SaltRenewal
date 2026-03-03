@@ -114,21 +114,16 @@ const addPriceEstimate = async (data) => {
       formType = '상담 신청형';
     }
     
-    // Format time as YY.MM.DD h:mmam/pm (Seoul timezone)
+    // Format time as DD.MM.YYYY HH:mm (Seoul timezone, 24-hour format)
     const formatTime = (date) => {
       const d = new Date(date);
       const options = { timeZone: 'Asia/Seoul' };
-      const year = d.toLocaleString('en-US', { ...options, year: '2-digit' });
-      const month = d.toLocaleString('en-US', { ...options, month: '2-digit' });
       const day = d.toLocaleString('en-US', { ...options, day: '2-digit' });
-      const hour = d.toLocaleString('en-US', { ...options, hour: 'numeric', hour12: true }).toLowerCase();
+      const month = d.toLocaleString('en-US', { ...options, month: '2-digit' });
+      const year = d.toLocaleString('en-US', { ...options, year: 'numeric' });
+      const hour = d.toLocaleString('en-US', { ...options, hour: '2-digit', hour12: false });
       const minute = d.toLocaleString('en-US', { ...options, minute: '2-digit' });
-      // Extract hour number and am/pm
-      const hourMatch = hour.match(/(\d+)\s*(am|pm)/i);
-      if (hourMatch) {
-        return `${year}.${month}.${day} ${hourMatch[1]}:${minute}${hourMatch[2]}`;
-      }
-      return `${year}.${month}.${day}`;
+      return `${day}.${month}.${year} ${hour}:${minute}`;
     };
     
     // Column order: 현황/시간/경로/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/인입 폼/IP

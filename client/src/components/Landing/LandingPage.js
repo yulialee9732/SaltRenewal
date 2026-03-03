@@ -34,6 +34,9 @@ const LandingPage = () => {
     hasInternet: '',
     privacyConsent: false
   });
+  const [consultationMonth, setConsultationMonth] = useState(new Date());
+  const [consultationSelectedDate, setConsultationSelectedDate] = useState(null);
+  const [consultationSelectedTime, setConsultationSelectedTime] = useState('');
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [showQuestionForm, setShowQuestionForm] = useState(false);
   const [questionForm, setQuestionForm] = useState({ phone: '', question: '' });
@@ -579,6 +582,10 @@ const LandingPage = () => {
         indoorCount: consultationForm.indoorCount,
         outdoorCount: consultationForm.outdoorCount
       },
+      appointment: consultationSelectedDate && consultationSelectedTime ? {
+        date: consultationSelectedDate.toISOString(),
+        time: consultationSelectedTime
+      } : null,
       consultationRequest: true,
       submittedAt: new Date().toISOString()
     };
@@ -605,6 +612,8 @@ const LandingPage = () => {
           hasInternet: '',
           privacyConsent: false
         });
+        setConsultationSelectedDate(null);
+        setConsultationSelectedTime('');
       } else {
         alert('상담 신청 중 오류가 발생했습니다. 다시 시도해주세요.');
       }
@@ -1147,6 +1156,138 @@ const LandingPage = () => {
                   placeholder="있음 / 없음 / CCTV와 함께 설치 예정"
                   required
                 />
+              </div>
+
+              <div className="consultation-form-group">
+                <label>희망 설치 날짜</label>
+                <div className="calendar-section consultation-calendar">
+                  <div className="calendar-header">
+                    <button 
+                      type="button"
+                      className="month-nav-btn" 
+                      onClick={() => setConsultationMonth(new Date(consultationMonth.getFullYear(), consultationMonth.getMonth() - 1, 1))}
+                    >
+                      ◀
+                    </button>
+                    <h3>{consultationMonth.getFullYear()}년 {consultationMonth.getMonth() + 1}월</h3>
+                    <button 
+                      type="button"
+                      className="month-nav-btn" 
+                      onClick={() => setConsultationMonth(new Date(consultationMonth.getFullYear(), consultationMonth.getMonth() + 1, 1))}
+                    >
+                      ▶
+                    </button>
+                  </div>
+                  <table className="calendar">
+                    <thead>
+                      <tr>
+                        <th>일</th>
+                        <th>월</th>
+                        <th>화</th>
+                        <th>수</th>
+                        <th>목</th>
+                        <th>금</th>
+                        <th>토</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(() => {
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        const getMinimumDate = () => {
+                          let minDate = new Date(today);
+                          let businessDaysAdded = 0;
+                          while (businessDaysAdded < 2) {
+                            minDate.setDate(minDate.getDate() + 1);
+                            if (isWeekday(minDate) && !isHoliday(minDate)) {
+                              businessDaysAdded++;
+                            }
+                          }
+                          return minDate;
+                        };
+                        const minimumDate = getMinimumDate();
+                        const year = consultationMonth.getFullYear();
+                        const month = consultationMonth.getMonth();
+                        const firstDay = new Date(year, month, 1).getDay();
+                        const daysInMonth = new Date(year, month + 1, 0).getDate();
+                        const weeks = [];
+                        let days = [];
+                        for (let i = 0; i < firstDay; i++) {
+                          days.push(null);
+                        }
+                        for (let day = 1; day <= daysInMonth; day++) {
+                          const date = new Date(year, month, day);
+                          const isAvailable = date >= minimumDate && isWeekday(date) && !isHoliday(date);
+                          days.push({ day, date, isAvailable });
+                          if (days.length === 7) {
+                            weeks.push(days);
+                            days = [];
+                          }
+                        }
+                        if (days.length > 0) {
+                          while (days.length < 7) {
+                            days.push(null);
+                          }
+                          weeks.push(days);
+                        }
+                        return weeks.map((week, weekIndex) => (
+                          <tr key={weekIndex}>
+                            {week.map((dayInfo, dayIndex) => (
+                              <td key={dayIndex}>
+                                {dayInfo && (
+                                  <button
+                                    type="button"
+                                    className={`calendar-day ${!dayInfo.isAvailable ? 'disabled' : ''} ${consultationSelectedDate && consultationSelectedDate.getTime() === dayInfo.date.getTime() ? 'selected' : ''}`}
+                                    onClick={() => dayInfo.isAvailable && setConsultationSelectedDate(dayInfo.date)}
+                                    disabled={!dayInfo.isAvailable}
+                                  >
+                                    {dayInfo.day}
+                                  </button>
+                                )}
+                              </td>
+                            ))}
+                          </tr>
+                        ));
+                      })()}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="consultation-form-group">
+                <label>희망 설치 시간</label>
+                <div className="time-section consultation-time">
+                  <div className="time-group">
+                    <h5>오전</h5>
+                    <div className="time-slots">
+                      {timeSlots.morning.map(time => (
+                        <button
+                          key={time}
+                          type="button"
+                          className={`time-slot ${consultationSelectedTime === time ? 'selected' : ''}`}
+                          onClick={() => setConsultationSelectedTime(time)}
+                        >
+                          {time}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="time-group">
+                    <h5>오후</h5>
+                    <div className="time-slots">
+                      {timeSlots.afternoon.map(time => (
+                        <button
+                          key={time}
+                          type="button"
+                          className={`time-slot ${consultationSelectedTime === time ? 'selected' : ''}`}
+                          onClick={() => setConsultationSelectedTime(time)}
+                        >
+                          {time}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className="consultation-form-group checkbox-group">
