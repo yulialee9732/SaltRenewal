@@ -42,16 +42,16 @@ const checkDuplicate = async (sheetName, phoneNumber) => {
     const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID;
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${sheetName}!A2:R1000`, // Read all data rows (skip header)
+      range: `${sheetName}!A2:Q1000`, // Read all data rows (skip header)
     });
 
     const rows = response.data.values || [];
 
     // Check for duplicate phone number
-    // Column order: 체크/현황/시간/경로/인입 폼/연락처(F, index 5)/타입/주소/...
+    // Column order: 현황/시간/경로/연락처(D, index 3)/타입/주소/...
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      const existingPhone = row[5]; // Column F: 연락처
+      const existingPhone = row[3]; // Column D: 연락처
 
       if (existingPhone && existingPhone === phoneNumber) {
         return `중복 연락처 (${i + 2}번째 줄)`;
@@ -131,13 +131,11 @@ const addPriceEstimate = async (data) => {
       return `${year}.${month}.${day}`;
     };
     
-    // Column order: 체크/현황/시간/경로/인입 폼/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/IP
+    // Column order: 현황/시간/경로/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/인입 폼/IP
     const row = [
-      false, // 체크 - checkbox initially unchecked
       '대기중', // 현황 - default status
       formatTime(submittedAt), // 시간
       '솔트', // 경로
-      formType, // 인입 폼
       contactInfo.phoneNumber || '-', // 연락처
       contactInfo.locationType || '-', // 타입
       contactInfo.address || '-', // 주소
@@ -150,9 +148,10 @@ const addPriceEstimate = async (data) => {
       currentSelection.specialOptions && currentSelection.specialOptions.length > 0 ? currentSelection.specialOptions.join(', ') : '-', // 특수공사
       contactInfo.hasInternet || '-', // 인터넷
       duplicateMemo || '-', // 메모
+      formType, // 인입 폼
       ipAddress || '-' // IP
     ];
-    const range = 'SALT 상담신청!A:R';
+    const range = 'SALT 상담신청!A:Q';
 
     // Get the sheet ID for the target sheet
     const spreadsheet = await sheets.spreadsheets.get({
