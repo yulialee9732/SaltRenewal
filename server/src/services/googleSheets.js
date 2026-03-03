@@ -141,8 +141,8 @@ const addPriceEstimate = async (data) => {
       contactInfo.phoneNumber || '-', // 연락처
       contactInfo.locationType || '-', // 타입
       contactInfo.address || '-', // 주소
-      appointment.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '-', // 희망날짜
-      appointment.time || '-', // 희망시간
+      appointment?.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '-', // 희망날짜
+      appointment?.time || '-', // 희망시간
       currentSelection.cameraType || initialSelection?.cameraType || '-', // 화소
       currentSelection.outdoorCount || 0, // 실외
       currentSelection.indoorCount || 0, // 실내
