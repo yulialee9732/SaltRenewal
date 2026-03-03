@@ -180,25 +180,7 @@ const PriceEstimate = () => {
       
       if (response.ok) {
         const result = await response.json();
-        console.log('✅ 견적이 MongoDB에 저장되었습니다:', result);
-        
-        // Also submit to 간편견적 with 전환: O (converted)
-        const quickEstimateData = {
-          ...formData,
-          converted: true
-        };
-        
-        fetch(`${API_URL}/price-estimate/quick`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(quickEstimateData),
-        }).then(() => {
-          console.log('✅ 간편견적 저장 (전환: O)');
-        }).catch(err => {
-          console.error('❌ 간편견적 저장 실패:', err);
-        });
+        console.log('✅ 견적이 저장되었습니다:', result);
         
         alert('견적 신청이 완료되었습니다!');
         // Reset form
