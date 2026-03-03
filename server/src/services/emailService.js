@@ -67,7 +67,7 @@ const sendFormNotification = async (formData) => {
       return d.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
     };
     
-    const subject = `[SALT] 새 ${formType} 접수 - ${phoneNumber || '연락처 없음'}`;
+    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} 실내 ${indoorCount || 0}대, 실외 ${outdoorCount || 0}대 설치, 공사희망일: ${appointmentDate || '-'}, 인터넷: ${hasInternet || '-'}`;
     
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -199,3 +199,33 @@ module.exports = {
   sendFormNotification,
   sendQuestionNotification
 };
+
+// Test when run directly
+if (require.main === module) {
+  (async () => {
+    console.log('🧪 Testing email configuration...\n');
+    const result = await initializeEmail();
+    if (result) {
+      console.log('\n✅ Email configuration is valid!');
+      console.log('📧 Sending test email...');
+      await sendFormNotification({
+        formType: '테스트',
+        phoneNumber: '010-1234-5678',
+        address: '서울시 테스트구',
+        locationType: '가정집',
+        appointmentDate: '2026-03-05',
+        appointmentTime: '오전',
+        cameraType: '500만화소',
+        outdoorCount: 2,
+        indoorCount: 1,
+        iotOptions: '없음',
+        specialOptions: '없음',
+        hasInternet: '있음',
+        submittedAt: new Date().toISOString()
+      });
+    } else {
+      console.log('\n❌ Email configuration failed. Check EMAIL_USER and EMAIL_PASS environment variables.');
+    }
+    process.exit(0);
+  })();
+}
