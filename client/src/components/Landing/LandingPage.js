@@ -426,18 +426,33 @@ const LandingPage = () => {
     }
   };
 
-  const handleQuestionSubmit = (e) => {
+  const handleQuestionSubmit = async (e) => {
     e.preventDefault();
     
-    // API path: POST /api/notifications/question
-    // notificationsAPI.newQuestion({ phone, question })
+    try {
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+      const response = await fetch(`${API_URL}/notifications/question`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone: questionForm.phone,
+          question: questionForm.question
+        }),
+      });
 
-    // Show success message
-    alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
-    
-    // Reset form and close
-    setQuestionForm({ phone: '', question: '' });
-    setShowQuestionForm(false);
+      if (response.ok) {
+        alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+        setQuestionForm({ phone: '', question: '' });
+        setShowQuestionForm(false);
+      } else {
+        alert('질문 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Error submitting question:', error);
+      alert('오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handleInlineQuestionFormChange = (e) => {
@@ -456,17 +471,32 @@ const LandingPage = () => {
     }
   };
 
-  const handleInlineQuestionSubmit = (e) => {
+  const handleInlineQuestionSubmit = async (e) => {
     e.preventDefault();
     
-    // API path: POST /api/notifications/question
-    // notificationsAPI.newQuestion({ phone, question })
+    try {
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+      const response = await fetch(`${API_URL}/notifications/question`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone: inlineQuestionForm.phone,
+          question: inlineQuestionForm.question
+        }),
+      });
 
-    // Show success message
-    alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
-    
-    // Reset form
-    setInlineQuestionForm({ phone: '', question: '' });
+      if (response.ok) {
+        alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+        setInlineQuestionForm({ phone: '', question: '' });
+      } else {
+        alert('질문 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Error submitting question:', error);
+      alert('오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handleChatSend = async () => {
