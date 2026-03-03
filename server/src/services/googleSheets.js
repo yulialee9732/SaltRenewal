@@ -138,19 +138,19 @@ const addPriceEstimate = async (data) => {
       formatTime(submittedAt), // 시간
       '솔트', // 경로
       formType, // 인입 폼
-      contactInfo.phoneNumber || '', // 연락처
-      contactInfo.locationType || '', // 타입
-      contactInfo.address || '', // 주소
-      appointment.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '', // 희망날짜
-      appointment.time || '', // 희망시간
-      currentSelection.cameraType || initialSelection?.cameraType || '', // 화소
+      contactInfo.phoneNumber || '-', // 연락처
+      contactInfo.locationType || '-', // 타입
+      contactInfo.address || '-', // 주소
+      appointment.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '-', // 희망날짜
+      appointment.time || '-', // 희망시간
+      currentSelection.cameraType || initialSelection?.cameraType || '-', // 화소
       currentSelection.outdoorCount || 0, // 실외
       currentSelection.indoorCount || 0, // 실내
-      currentSelection.iotOptions ? currentSelection.iotOptions.join(', ') : '', // IoT
-      currentSelection.specialOptions ? currentSelection.specialOptions.join(', ') : '', // 특수공사
-      contactInfo.hasInternet || '', // 인터넷
-      duplicateMemo, // 메모
-      ipAddress || '' // IP
+      currentSelection.iotOptions && currentSelection.iotOptions.length > 0 ? currentSelection.iotOptions.join(', ') : '-', // IoT
+      currentSelection.specialOptions && currentSelection.specialOptions.length > 0 ? currentSelection.specialOptions.join(', ') : '-', // 특수공사
+      contactInfo.hasInternet || '-', // 인터넷
+      duplicateMemo || '-', // 메모
+      ipAddress || '-' // IP
     ];
     const range = 'SALT 상담신청!A:Q';
 
