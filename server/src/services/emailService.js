@@ -17,15 +17,18 @@ const initializeEmail = async () => {
     }
     
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // use TLS
       auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASS
-      }
+      },
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
+      socketTimeout: 15000
     });
     
-    // Verify connection
-    await transporter.verify();
     console.log('✅ Email service initialized');
     return transporter;
   } catch (error) {

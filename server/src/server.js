@@ -7,14 +7,16 @@ const { initializeSheets } = require('./services/googleSheets');
 
 // Load environment variables from the server root directory
 const envPath = path.join(__dirname, '..', '.env');
-console.log('📁 Loading .env from:', envPath);
-console.log('📁 File exists:', require('fs').existsSync(envPath));
-const result = dotenv.config({ path: envPath });
-if (result.error) {
-  console.error('❌ Error loading .env:', result.error);
+const fs = require('fs');
+if (fs.existsSync(envPath)) {
+  const result = dotenv.config({ path: envPath });
+  if (result.error) {
+    console.error('❌ Error loading .env:', result.error);
+  } else {
+    console.log('✅ .env loaded from file');
+  }
 } else {
-  console.log('✅ .env loaded successfully');
-  console.log('✅ GOOGLE_SPREADSHEET_ID:', process.env.GOOGLE_SPREADSHEET_ID ? 'Found' : 'Missing');
+  console.log('📁 No .env file found, using environment variables directly');
 }
 
 const app = express();
