@@ -624,21 +624,21 @@ const PriceEstimate = () => {
                   <input 
                     type="radio" 
                     name="internet" 
-                    value="네"
-                    checked={hasInternet === '네'}
+                    value="있음"
+                    checked={hasInternet === '있음'}
                     onChange={(e) => setHasInternet(e.target.value)}
                   />
-                  네
+                  있음
                 </label>
                 <label>
                   <input 
                     type="radio" 
                     name="internet" 
-                    value="아니요"
-                    checked={hasInternet === '아니요'}
+                    value="없음"
+                    checked={hasInternet === '없음'}
                     onChange={(e) => setHasInternet(e.target.value)}
                   />
-                  아니요
+                  없음
                 </label>
                 <label>
                   <input 
