@@ -19,14 +19,20 @@ const initializeEmail = async () => {
     }
     
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
       auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASS
       },
       tls: {
+        ciphers: 'SSLv3',
         rejectUnauthorized: false
-      }
+      },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000
     });
     
     console.log('✅ Email service initialized');
