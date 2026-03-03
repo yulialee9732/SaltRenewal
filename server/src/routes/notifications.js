@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { sendNewChatNotification, sendNewQuestionNotification, sendChatSummaryEmail } = require('../services/emailService');
+// Email service removed - paths preserved:
+// const { sendNewChatNotification, sendNewQuestionNotification, sendChatSummaryEmail } = require('../services/emailService');
 const { addCustomerQuestion, updateQuestionReadStatus, deleteCustomerQuestion } = require('../services/googleSheets');
 const Question = require('../models/Question');
 const Chat = require('../models/Chat');
@@ -25,9 +26,6 @@ router.post('/chat', async (req, res) => {
       status: 'pending',
       messages: []
     });
-    
-    // Send email notification
-    sendNewChatNotification({ sessionId, customerName }).catch(() => {});
     
     res.json({ success: true, chat });
   } catch (error) {
@@ -108,15 +106,6 @@ router.patch('/chat/:sessionId/end', async (req, res) => {
     if (!chat) {
       return res.status(404).json({ success: false, error: 'Chat not found' });
     }
-    
-    // Send chat summary email
-    sendChatSummaryEmail({
-      customerName: chat.customerName,
-      messages: chat.messages,
-      acceptedAt: chat.acceptedAt,
-      endedAt: chat.endedAt,
-      endedBy: chat.endedBy
-    }).catch(() => {});
     
     res.json({ success: true, chat });
   } catch (error) {
@@ -225,9 +214,6 @@ router.post('/question', async (req, res) => {
       mongoId: savedQuestion._id.toString()
     }).catch(err => console.error('Google Sheets error:', err));
     
-    // 3. Send email notification
-    sendNewQuestionNotification({ phone, question }).catch(() => {});
-    
     res.json({ success: true, question: savedQuestion });
   } catch (error) {
     console.error('Error saving question:', error);
@@ -291,8 +277,7 @@ router.delete('/questions/:id', async (req, res) => {
 
 // POST /api/notifications/chat-summary - send chat summary when ended
 router.post('/chat-summary', async (req, res) => {
-  const { customerName, messages, acceptedAt, endedAt, endedBy } = req.body;
-  sendChatSummaryEmail({ customerName, messages, acceptedAt, endedAt, endedBy }).catch(() => {});
+  // Email sending removed - API path preserved for later use
   res.json({ success: true });
 });
 

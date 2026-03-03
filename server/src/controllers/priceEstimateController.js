@@ -1,6 +1,7 @@
 const PriceEstimate = require('../models/PriceEstimate');
 const { addPriceEstimate, getAllSheetEstimates } = require('../services/googleSheets');
-const { sendErrorNotification, sendNewEstimateNotification } = require('../services/emailService');
+// Email service removed - paths preserved:
+// const { sendErrorNotification, sendNewEstimateNotification } = require('../services/emailService');
 
 // Submit full consultation (상담신청폼) - Step 4
 exports.submitPriceEstimate = async (req, res) => {
@@ -28,9 +29,6 @@ exports.submitPriceEstimate = async (req, res) => {
       const priceEstimate = new PriceEstimate(estimateData);
       await priceEstimate.save();
 
-      // Send new estimate notification email
-      sendNewEstimateNotification(estimateData).catch(() => {});
-
       res.status(201).json({
         success: true,
         message: '견적 신청이 성공적으로 제출되었습니다.',
@@ -38,18 +36,6 @@ exports.submitPriceEstimate = async (req, res) => {
       });
     } catch (dbError) {
       console.error('Database error (Google Sheets updated):', dbError);
-      
-      // Send email notification about database error
-      await sendErrorNotification(
-        'Database - Full Consultation Error',
-        `Database failed but Google Sheets updated: ${dbError.message}`,
-        {
-          formType: '상담신청',
-          ipAddress: estimateData.ipAddress,
-          contactInfo: estimateData.contactInfo?.phoneNumber || 'N/A',
-          stackTrace: dbError.stack
-        }
-      );
       
       // Still return success since Google Sheets was updated
       res.status(201).json({
@@ -94,9 +80,6 @@ exports.submitQuickEstimate = async (req, res) => {
       const priceEstimate = new PriceEstimate(estimateData);
       await priceEstimate.save();
 
-      // Send new estimate notification email
-      sendNewEstimateNotification(estimateData).catch(() => {});
-
       res.status(201).json({
         success: true,
         message: '간편 견적이 저장되었습니다.',
@@ -104,18 +87,6 @@ exports.submitQuickEstimate = async (req, res) => {
       });
     } catch (dbError) {
       console.error('Database error (Google Sheets updated):', dbError);
-      
-      // Send email notification about database error
-      await sendErrorNotification(
-        'Database - Quick Estimate Error',
-        `Database failed but Google Sheets updated: ${dbError.message}`,
-        {
-          formType: '간편견적',
-          ipAddress: estimateData.ipAddress,
-          contactInfo: estimateData.contactInfo?.phoneNumber || 'N/A',
-          stackTrace: dbError.stack
-        }
-      );
       
       // Still return success since Google Sheets was updated
       res.status(201).json({

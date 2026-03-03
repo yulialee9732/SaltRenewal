@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
-const { sendErrorNotification } = require('./emailService');
+// Email service removed - paths preserved:
+// const { sendErrorNotification } = require('./emailService');
 
 // Initialize Google Sheets API
 let sheets = null;
@@ -34,35 +35,31 @@ const initializeSheets = async () => {
   }
 };
 
-// Check for duplicate entries in the sheet
-const checkDuplicate = async (sheetName, ipAddress, phoneNumber) => {
+// Check for duplicate entries in the sheet (by phone number)
+const checkDuplicate = async (sheetName, phoneNumber) => {
   try {
+    if (!phoneNumber) return '';
+    
     const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID;
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: sheetName === '간편견적' ? `${sheetName}!A2:O1000` : `${sheetName}!A2:N1000`, // Read all data rows (skip header)
+      range: `${sheetName}!A2:P1000`, // Read all data rows (skip header)
     });
 
     const rows = response.data.values || [];
-    const memos = [];
 
-    // Check for duplicate IP or phone number
+    // Check for duplicate phone number
+    // Column order: 체크/시간/경로/인입 폼/연락처(E, index 4)/타입/주소/...
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      const existingIp = row[0]; // Column A: IP
-      const existingPhone = sheetName === '간편견적' ? row[8] : row[3]; // 간편견적: Column I, 상담신청: Column D
+      const existingPhone = row[4]; // Column E: 연락처
 
-      if (existingIp && ipAddress && existingIp === ipAddress) {
-        memos.push(`중복 IP (${i + 2}번째 줄)`);
-        break;
-      }
-      if (existingPhone && phoneNumber && existingPhone === phoneNumber) {
-        memos.push(`중복 연락처 (${i + 2}번째 줄)`);
-        break;
+      if (existingPhone && existingPhone === phoneNumber) {
+        return `중복 연락처 (${i + 2}번째 줄)`;
       }
     }
 
-    return memos.length > 0 ? memos.join(', ') : '';
+    return '';
   } catch (error) {
     console.error('Error checking duplicates:', error.message);
     return ''; // Return empty string if error occurs
@@ -91,60 +88,71 @@ const addPriceEstimate = async (data) => {
       submittedAt
     } = data;
 
-    let row;
-    let range;
-    let sheetName;
-
-    if (type === 'quick') {
-      sheetName = '간편견적';
-      
-      // Check for duplicates
-      const memo = await checkDuplicate(sheetName, ipAddress, contactInfo.phoneNumber);
-      
-      // 간편견적: IP / 시간 / 화소 / 실내 / 실외 / IoT / 특수공사 / 전환(O/X) / 연락처 / 주소 / 타입 / 인터넷/ 희망날짜 / 희망 시간 / 메모
-      row = [
-        ipAddress || '',
-        new Date(submittedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-        currentSelection.cameraType || initialSelection?.cameraType || '',
-        currentSelection.indoorCount || 0,
-        currentSelection.outdoorCount || 0,
-        currentSelection.iotOptions ? currentSelection.iotOptions.join(', ') : '',
-        currentSelection.specialOptions ? currentSelection.specialOptions.join(', ') : '',
-        converted ? 'O' : 'X',
-        contactInfo.phoneNumber || '',
-        contactInfo.address || '',
-        contactInfo.locationType || '',
-        contactInfo.hasInternet || '',
-        appointment.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '',
-        appointment.time || '',
-        memo
-      ];
-      range = '간편견적!A:O';
+    // All forms go to SALT 상담신청
+    const sheetName = 'SALT 상담신청';
+    
+    // Check for duplicates
+    const duplicateMemo = await checkDuplicate(sheetName, contactInfo.phoneNumber);
+    
+    // Determine form type (인입 폼)
+    // - 견적 확인형: PriceEstimate component (has initialSelection from step 1)
+    // - 날짜 예약형: LandingPage schedule modal (scheduleOnly: true, no initialSelection)
+    // - 상담 신청형: LandingPage consultation form (consultationRequest: true)
+    let formType;
+    if (initialSelection) {
+      // PriceEstimate component - user went through camera selection flow
+      formType = '견적 확인형';
+    } else if (data.scheduleOnly) {
+      // LandingPage schedule modal
+      formType = '날짜 예약형';
+    } else if (data.consultationRequest) {
+      // LandingPage consultation form
+      formType = '상담 신청형';
+    } else if (appointment && appointment.date && appointment.time) {
+      // Fallback: has date/time but no distinguishing flag
+      formType = '날짜 예약형';
     } else {
-      sheetName = 'SALT 상담신청';
-      
-      // Check for duplicates
-      const memo = await checkDuplicate(sheetName, ipAddress, contactInfo.phoneNumber);
-      
-      // 상담 신청 폼: IP / 시간 / 화소 / 연락처 / 주소 / 타입 / 실내 / 실외 / IoT / 특수공사 / 인터넷 / 희망날짜 / 희망 시간 / 메모
-      row = [
-        ipAddress || '',
-        new Date(submittedAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-        currentSelection.cameraType || initialSelection?.cameraType || '',
-        contactInfo.phoneNumber || '',
-        contactInfo.address || '',
-        contactInfo.locationType || '',
-        currentSelection.indoorCount || 0,
-        currentSelection.outdoorCount || 0,
-        currentSelection.iotOptions ? currentSelection.iotOptions.join(', ') : '',
-        currentSelection.specialOptions ? currentSelection.specialOptions.join(', ') : '',
-        contactInfo.hasInternet || '',
-        appointment.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '',
-        appointment.time || '',
-        memo
-      ];
-      range = 'SALT 상담신청!A:N';
+      formType = '상담 신청형';
     }
+    
+    // Format time as YY.MM.DD h:mmam/pm (Seoul timezone)
+    const formatTime = (date) => {
+      const d = new Date(date);
+      const options = { timeZone: 'Asia/Seoul' };
+      const year = d.toLocaleString('en-US', { ...options, year: '2-digit' });
+      const month = d.toLocaleString('en-US', { ...options, month: '2-digit' });
+      const day = d.toLocaleString('en-US', { ...options, day: '2-digit' });
+      const hour = d.toLocaleString('en-US', { ...options, hour: 'numeric', hour12: true }).toLowerCase();
+      const minute = d.toLocaleString('en-US', { ...options, minute: '2-digit' });
+      // Extract hour number and am/pm
+      const hourMatch = hour.match(/(\d+)\s*(am|pm)/i);
+      if (hourMatch) {
+        return `${year}.${month}.${day} ${hourMatch[1]}:${minute}${hourMatch[2]}`;
+      }
+      return `${year}.${month}.${day}`;
+    };
+    
+    // Column order: 체크/시간/경로/인입 폼/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/IP
+    const row = [
+      false, // 체크 - checkbox initially unchecked
+      formatTime(submittedAt), // 시간
+      '솔트', // 경로
+      formType, // 인입 폼
+      contactInfo.phoneNumber || '', // 연락처
+      contactInfo.locationType || '', // 타입
+      contactInfo.address || '', // 주소
+      appointment.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '', // 희망날짜
+      appointment.time || '', // 희망시간
+      currentSelection.cameraType || initialSelection?.cameraType || '', // 화소
+      currentSelection.outdoorCount || 0, // 실외
+      currentSelection.indoorCount || 0, // 실내
+      currentSelection.iotOptions ? currentSelection.iotOptions.join(', ') : '', // IoT
+      currentSelection.specialOptions ? currentSelection.specialOptions.join(', ') : '', // 특수공사
+      contactInfo.hasInternet || '', // 인터넷
+      duplicateMemo, // 메모
+      ipAddress || '' // IP
+    ];
+    const range = 'SALT 상담신청!A:Q';
 
     // Get the sheet ID for the target sheet
     const spreadsheet = await sheets.spreadsheets.get({
@@ -182,21 +190,9 @@ const addPriceEstimate = async (data) => {
       },
     });
 
-    console.log(`✅ ${type === 'quick' ? '간편견적' : '상담신청'} added to Google Sheets (top row)`);
+    console.log(`✅ ${formType} added to SALT 상담신청 (top row)`);
   } catch (error) {
     console.error('❌ Error adding price estimate to Google Sheets:', error.message);
-    
-    // Send email notification about the error
-    await sendErrorNotification(
-      'Google Sheets - Price Estimate Error',
-      `Failed to add ${type === 'quick' ? '간편견적' : '상담신청'} to Google Sheets: ${error.message}`,
-      {
-        formType: type === 'quick' ? '간편견적' : '상담신청',
-        ipAddress: data.ipAddress,
-        contactInfo: data.contactInfo?.phoneNumber || 'N/A',
-        stackTrace: error.stack
-      }
-    );
   }
 };
 

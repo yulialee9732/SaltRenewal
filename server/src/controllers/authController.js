@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
-const { sendEmployeeRegistrationRequest } = require('../services/emailService');
+// Email service removed - paths preserved:
+// const { sendEmployeeRegistrationRequest } = require('../services/emailService');
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -75,9 +76,8 @@ exports.register = async (req, res) => {
     });
 
     if (user) {
-      // If employee registration, send notification email and return pending status (no token)
+      // If employee registration, return pending status (no token)
       if (role === 'employee') {
-        await sendEmployeeRegistrationRequest({ name: user.name, username: user.username, phone: user.phone });
         return res.status(202).json({
           pending: true,
           message: '가입 요청이 접수되었습니다. 관리자 승인 후 로그인하실 수 있습니다.'

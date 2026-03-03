@@ -4,8 +4,6 @@ const dotenv = require('dotenv');
 const path = require('path');
 const connectDB = require('./config/db');
 const { initializeSheets } = require('./services/googleSheets');
-const { initializeEmail } = require('./services/emailService');
-const { scheduleDailyEmail } = require('./services/dailyEmailScheduler');
 
 // Load environment variables from the server root directory
 const envPath = path.join(__dirname, '..', '.env');
@@ -27,11 +25,7 @@ connectDB();
 // Initialize Google Sheets (async, non-blocking)
 initializeSheets().catch(err => console.error('Google Sheets initialization failed:', err.message));
 
-// Initialize Email Service (async, non-blocking)
-initializeEmail();
-
-// Initialize Daily Email Scheduler (7:00 AM NC time)
-scheduleDailyEmail();
+// Email service removed
 
 // Middleware
 app.use(cors());

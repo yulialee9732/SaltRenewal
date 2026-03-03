@@ -429,11 +429,8 @@ const LandingPage = () => {
   const handleQuestionSubmit = (e) => {
     e.preventDefault();
     
-    // Send question to server - saves to MongoDB, Google Sheets, and sends email
-    notificationsAPI.newQuestion({ 
-      phone: questionForm.phone, 
-      question: questionForm.question 
-    }).catch(() => {});
+    // API path: POST /api/notifications/question
+    // notificationsAPI.newQuestion({ phone, question })
 
     // Show success message
     alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
@@ -462,11 +459,8 @@ const LandingPage = () => {
   const handleInlineQuestionSubmit = (e) => {
     e.preventDefault();
     
-    // Send question to server - saves to MongoDB, Google Sheets, and sends email
-    notificationsAPI.newQuestion({ 
-      phone: inlineQuestionForm.phone, 
-      question: inlineQuestionForm.question 
-    }).catch(() => {});
+    // API path: POST /api/notifications/question
+    // notificationsAPI.newQuestion({ phone, question })
 
     // Show success message
     alert('질문이 등록되었습니다. 빠른 시일 내에 연락드리겠습니다.');
