@@ -1,42 +1,26 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 // Email recipients
 const NOTIFICATION_EMAILS = ['2hh9732@gmail.com', 'yulialee217@gmail.com'];
 
-// Create transporter
-let transporter = null;
+// Create Resend client
+let resend = null;
 
 const initializeEmail = async () => {
   try {
-    const EMAIL_USER = process.env.EMAIL_USER;
-    const EMAIL_PASS = process.env.EMAIL_PASS;
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
     
-    console.log('📧 Email config check:', EMAIL_USER ? 'USER found' : 'USER missing', EMAIL_PASS ? 'PASS found' : 'PASS missing');
+    console.log('📧 Email config check:', RESEND_API_KEY ? 'RESEND_API_KEY found' : 'RESEND_API_KEY missing');
     
-    if (!EMAIL_USER || !EMAIL_PASS) {
-      console.warn('⚠️  Email credentials not configured. Email notifications disabled.');
+    if (!RESEND_API_KEY) {
+      console.warn('⚠️  Resend API key not configured. Email notifications disabled.');
       return null;
     }
     
-    transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS
-      },
-      tls: {
-        ciphers: 'SSLv3',
-        rejectUnauthorized: false
-      },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 10000
-    });
+    resend = new Resend(RESEND_API_KEY);
     
-    console.log('✅ Email service initialized');
-    return transporter;
+    console.log('✅ Email service initialized (Resend)');
+    return resend;
   } catch (error) {
     console.error('❌ Email service error:', error.message);
     return null;
@@ -46,9 +30,9 @@ const initializeEmail = async () => {
 // Send form submission notification
 const sendFormNotification = async (formData) => {
   try {
-    if (!transporter) {
-      transporter = await initializeEmail();
-      if (!transporter) return; // Skip if not configured
+    if (!resend) {
+      resend = await initializeEmail();
+      if (!resend) return;
     }
     
     const {
@@ -67,37 +51,40 @@ const sendFormNotification = async (formData) => {
       submittedAt
     } = formData;
     
-    // Format date
     const formatDate = (dateStr) => {
       if (!dateStr) return '-';
       const d = new Date(dateStr);
       return d.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
     };
     
-    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} 실내 ${indoorCount || 0}대, 실외 ${outdoorCount || 0}대 설치, 공사희망일: ${appointmentDate || '-'}, 인터넷: ${hasInternet || '-'}`;
+    const cameraParts = [];
+    if (indoorCount > 0) cameraParts.push(`실내 ${indoorCount}대`);
+    if (outdoorCount > 0) cameraParts.push(`실외 ${outdoorCount}대`);
+    const cameraCountStr = cameraParts.length > 0 ? cameraParts.join(', ') + ' 설치, ' : '';
+    
+    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} ${cameraCountStr}공사희망일: ${appointmentDate || '-'}, 인터넷: ${hasInternet || '-'}`;
     
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #0099b0; border-bottom: 2px solid #0099b0; padding-bottom: 10px;">
           🔔 새 상담 신청이 접수되었습니다
         </h2>
-        
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
           <tr style="background-color: #f5f5f5;">
-            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; width: 30%;">인입 폼</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">${formType}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; width: 30%;">접수 시간</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${formatDate(submittedAt)}</td>
           </tr>
           <tr>
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">연락처</td>
             <td style="padding: 10px; border: 1px solid #ddd;">${phoneNumber || '-'}</td>
           </tr>
           <tr style="background-color: #f5f5f5;">
-            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">타입</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">${locationType || '-'}</td>
-          </tr>
-          <tr>
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">주소</td>
             <td style="padding: 10px; border: 1px solid #ddd;">${address || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">타입</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${locationType || '-'}</td>
           </tr>
           <tr style="background-color: #f5f5f5;">
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">희망 날짜</td>
@@ -128,41 +115,38 @@ const sendFormNotification = async (formData) => {
             <td style="padding: 10px; border: 1px solid #ddd;">${hasInternet || '-'}</td>
           </tr>
           <tr>
-            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">접수 시간</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">${formatDate(submittedAt)}</td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">인입 폼</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${formType}</td>
           </tr>
         </table>
-        
         <p style="margin-top: 20px; color: #666; font-size: 12px;">
           이 이메일은 SALT 웹사이트에서 자동으로 발송되었습니다.
         </p>
       </div>
     `;
     
-    console.log('📧 Attempting to send form notification email...');
-    const result = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: NOTIFICATION_EMAILS.join(', '),
+    console.log('📧 Attempting to send form notification email via Resend...');
+    const result = await resend.emails.send({
+      from: 'SALT <onboarding@resend.dev>',
+      to: NOTIFICATION_EMAILS,
       subject,
       html
     });
     
-    console.log(`✅ Email notification sent for ${formType}, messageId: ${result.messageId}`);
+    console.log(`✅ Email notification sent for ${formType}, id: ${result.data?.id}`);
   } catch (error) {
     console.error('❌ Error sending email notification:', error.message);
   }
 };
 
-// Send question notification
 const sendQuestionNotification = async (questionData) => {
   try {
-    if (!transporter) {
-      transporter = await initializeEmail();
-      if (!transporter) return;
+    if (!resend) {
+      resend = await initializeEmail();
+      if (!resend) return;
     }
     
     const { phone, question } = questionData;
-    
     const subject = `[SALT] 새 고객 질문 - ${phone || '연락처 없음'}`;
     
     const html = `
@@ -170,7 +154,6 @@ const sendQuestionNotification = async (questionData) => {
         <h2 style="color: #0099b0; border-bottom: 2px solid #0099b0; padding-bottom: 10px;">
           ❓ 새 고객 질문이 접수되었습니다
         </h2>
-        
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
           <tr style="background-color: #f5f5f5;">
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; width: 30%;">연락처</td>
@@ -181,16 +164,15 @@ const sendQuestionNotification = async (questionData) => {
             <td style="padding: 10px; border: 1px solid #ddd;">${question || '-'}</td>
           </tr>
         </table>
-        
         <p style="margin-top: 20px; color: #666; font-size: 12px;">
           이 이메일은 SALT 웹사이트에서 자동으로 발송되었습니다.
         </p>
       </div>
     `;
     
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: NOTIFICATION_EMAILS.join(', '),
+    await resend.emails.send({
+      from: 'SALT <onboarding@resend.dev>',
+      to: NOTIFICATION_EMAILS,
       subject,
       html
     });
@@ -207,7 +189,6 @@ module.exports = {
   sendQuestionNotification
 };
 
-// Test when run directly
 if (require.main === module) {
   (async () => {
     console.log('🧪 Testing email configuration...\n');
@@ -231,7 +212,7 @@ if (require.main === module) {
         submittedAt: new Date().toISOString()
       });
     } else {
-      console.log('\n❌ Email configuration failed. Check EMAIL_USER and EMAIL_PASS environment variables.');
+      console.log('\n❌ Email configuration failed. Check RESEND_API_KEY environment variable.');
     }
     process.exit(0);
   })();
