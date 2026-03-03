@@ -127,7 +127,7 @@ const sendFormNotification = async (formData) => {
     
     console.log('📧 Attempting to send form notification email via Resend...');
     const result = await resend.emails.send({
-      from: 'SALT <onboarding@resend.dev>',
+      from: 'SALT <noreply@saltcctv.com>',
       to: NOTIFICATION_EMAILS,
       subject,
       html
@@ -171,7 +171,7 @@ const sendQuestionNotification = async (questionData) => {
     `;
     
     await resend.emails.send({
-      from: 'SALT <onboarding@resend.dev>',
+      from: 'SALT <noreply@saltcctv.com>',
       to: NOTIFICATION_EMAILS,
       subject,
       html
