@@ -3,10 +3,26 @@ const { addPriceEstimate, getAllSheetEstimates } = require('../services/googleSh
 // Email service removed - paths preserved:
 // const { sendErrorNotification, sendNewEstimateNotification } = require('../services/emailService');
 
+// Helper function to validate phone number (must be 11 digits)
+const validatePhoneNumber = (phoneNumber) => {
+  if (!phoneNumber) return false;
+  const digitsOnly = phoneNumber.replace(/[^0-9]/g, '');
+  return digitsOnly.length === 11;
+};
+
 // Submit full consultation (상담신청폼) - Step 4
 exports.submitPriceEstimate = async (req, res) => {
   try {
     const estimateData = req.body;
+    
+    // Validate phone number
+    const phoneNumber = estimateData.contactInfo?.phoneNumber;
+    if (!validatePhoneNumber(phoneNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: '유효한 연락처를 입력해주세요. (11자리 숫자)'
+      });
+    }
     
     // Get IP address
     const ipAddress = req.headers['x-forwarded-for']?.split(',')[0] || 
@@ -58,6 +74,15 @@ exports.submitPriceEstimate = async (req, res) => {
 exports.submitQuickEstimate = async (req, res) => {
   try {
     const estimateData = req.body;
+    
+    // Validate phone number
+    const phoneNumber = estimateData.contactInfo?.phoneNumber;
+    if (!validatePhoneNumber(phoneNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: '유효한 연락처를 입력해주세요. (11자리 숫자)'
+      });
+    }
     
     // Get IP address
     const ipAddress = req.headers['x-forwarded-for']?.split(',')[0] || 
