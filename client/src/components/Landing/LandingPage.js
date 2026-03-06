@@ -901,8 +901,8 @@ const LandingPage = () => {
                   <span className="item-label">옵션</span>
                 </div>
                 <div className="combination-item optional">
-                  <span className="item-icon">🔥</span>
-                  <span className="item-text">화재 감지 센서</span>
+                  <span className="item-icon">📡</span>
+                  <span className="item-text">움직임 감지 센서</span>
                   <span className="item-label">옵션</span>
                 </div>
               </div>
@@ -928,8 +928,8 @@ const LandingPage = () => {
                   <span className="item-label">옵션</span>
                 </div>
                 <div className="combination-item optional">
-                  <span className="item-icon">🔥</span>
-                  <span className="item-text">화재 감지 센서</span>
+                  <span className="item-icon">📡</span>
+                  <span className="item-text">움직임 감지 센서</span>
                   <span className="item-label">옵션</span>
                 </div>
               </div>
