@@ -48,6 +48,9 @@ const sendFormNotification = async (formData) => {
       iotOptions,
       specialOptions,
       hasInternet,
+      ptzCount,
+      storageOption,
+      monitorInstall,
       submittedAt
     } = formData;
     
@@ -111,6 +114,18 @@ const sendFormNotification = async (formData) => {
             <td style="padding: 10px; border: 1px solid #ddd;">${specialOptions || '-'}</td>
           </tr>
           <tr style="background-color: #f5f5f5;">
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">PTZ 줌 카메라</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${ptzCount > 0 ? ptzCount + '대' : '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">저장용량 추가</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${storageOption || '-'}</td>
+          </tr>
+          <tr style="background-color: #f5f5f5;">
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">모니터 설치</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${monitorInstall ? '예' : '-'}</td>
+          </tr>
+          <tr>
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">인터넷</td>
             <td style="padding: 10px; border: 1px solid #ddd;">${hasInternet || '-'}</td>
           </tr>

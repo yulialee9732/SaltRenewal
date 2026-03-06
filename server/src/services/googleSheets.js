@@ -127,6 +127,9 @@ const addPriceEstimate = async (data) => {
     };
     
     // Build memo field (combine storage option, PTZ count, monitor install, and duplicate memo)
+    console.log('🔍 Memo Debug - currentSelection:', JSON.stringify(currentSelection, null, 2));
+    console.log('🔍 Memo Debug - ptzCount:', currentSelection.ptzCount, 'monitorInstall:', currentSelection.monitorInstall, 'storageOption:', currentSelection.storageOption);
+    
     const memoItems = [];
     if (currentSelection.ptzCount && currentSelection.ptzCount > 0) {
       memoItems.push(`PTZ 줌 카메라 ${currentSelection.ptzCount}대`);
@@ -141,6 +144,7 @@ const addPriceEstimate = async (data) => {
       memoItems.push(duplicateMemo);
     }
     const memoField = memoItems.length > 0 ? memoItems.join(', ') : '-';
+    console.log('🔍 Memo Debug - memoField:', memoField);
     
     // Column order: 현황/시간/경로/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/인입 폼/IP
     const row = [
@@ -216,6 +220,9 @@ const addPriceEstimate = async (data) => {
       iotOptions: currentSelection.iotOptions && currentSelection.iotOptions.length > 0 ? currentSelection.iotOptions.join(', ') : null,
       specialOptions: currentSelection.specialOptions && currentSelection.specialOptions.length > 0 ? currentSelection.specialOptions.join(', ') : null,
       hasInternet: contactInfo.hasInternet,
+      ptzCount: currentSelection.ptzCount,
+      storageOption: currentSelection.storageOption,
+      monitorInstall: currentSelection.monitorInstall,
       submittedAt
     }).catch(err => console.error('Email notification error:', err.message));
   } catch (error) {
