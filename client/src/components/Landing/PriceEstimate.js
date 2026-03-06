@@ -7,13 +7,13 @@ const PriceEstimate = () => {
   const containerRef = useRef(null);
   const priceSummaryRef = useRef(null);
   
-  // Scroll to appropriate position when step changes (mobile only)
+  // Scroll to appropriate position when step changes
   useEffect(() => {
-    if (step > 1 && window.innerWidth <= 768) {
+    if (step > 1) {
       // Small delay to ensure DOM is updated
       setTimeout(() => {
-        const navbarHeight = 150;
-        let targetRef = step === 2 ? priceSummaryRef : containerRef;
+        const navbarHeight = 100;
+        let targetRef = containerRef;
         if (targetRef.current) {
           const elementPosition = targetRef.current.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({
@@ -34,6 +34,44 @@ const PriceEstimate = () => {
   const [outdoorCount, setOutdoorCount] = useState(0);
   const [iotOptions, setIotOptions] = useState([]);
   const [specialOptions, setSpecialOptions] = useState([]);
+  const [ptzCount, setPtzCount] = useState(0);
+  const [monitorInstall, setMonitorInstall] = useState(false);
+  const [showIotOptions, setShowIotOptions] = useState(false);
+  const [showStorageOptions, setShowStorageOptions] = useState(false);
+  const [showSpecialOptions, setShowSpecialOptions] = useState(false);
+  const [storageOption, setStorageOption] = useState('');
+
+  // Accordion toggle functions - close others when one opens
+  const toggleIotSection = () => {
+    setShowIotOptions(!showIotOptions);
+    if (!showIotOptions) {
+      setShowStorageOptions(false);
+      setShowSpecialOptions(false);
+    }
+  };
+
+  const toggleStorageSection = () => {
+    setShowStorageOptions(!showStorageOptions);
+    if (!showStorageOptions) {
+      setShowIotOptions(false);
+      setShowSpecialOptions(false);
+    }
+  };
+
+  const toggleSpecialSection = () => {
+    setShowSpecialOptions(!showSpecialOptions);
+    if (!showSpecialOptions) {
+      setShowIotOptions(false);
+      setShowStorageOptions(false);
+    }
+  };
+  
+  // Storage options list
+  const storageOptionsList = [
+    { id: '2달', name: '저장기간 약 2달' },
+    { id: '3달', name: '저장기간 약 3달' },
+    { id: '4달', name: '저장기간 약 4달' }
+  ];
   
   // Step 3 - Form state
   const [phoneNumber, setPhoneNumber] = useState('010-');
@@ -41,6 +79,7 @@ const PriceEstimate = () => {
   const [locationType, setLocationType] = useState('');
   const [hasInternet, setHasInternet] = useState('');
   const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   
   // Step 4 - Date/Time state
   const [selectedDate, setSelectedDate] = useState(null);
@@ -122,8 +161,11 @@ const PriceEstimate = () => {
       cameraType,
       indoorCount,
       outdoorCount,
+      ptzCount,
+      monitorInstall,
       iotOptions: [...iotOptions],
-      specialOptions: [...specialOptions]
+      specialOptions: [...specialOptions],
+      storageOption
     });
     
     // Just move to step 2 to show price (no submission yet)
@@ -142,6 +184,7 @@ const PriceEstimate = () => {
     // Convert option IDs to display names
     const iotNames = iotOptions.map(id => iotOptionsList.find(opt => opt.id === id)?.name || id);
     const specialNames = specialOptions.map(id => specialOptionsList.find(opt => opt.id === id)?.name || id);
+    const storageOptionName = storageOption ? storageOptionsList.find(opt => opt.id === storageOption)?.name || storageOption : '';
     
     const formData = {
       initialSelection,
@@ -149,8 +192,11 @@ const PriceEstimate = () => {
         cameraType,
         indoorCount,
         outdoorCount,
+        ptzCount,
+        monitorInstall,
         iotOptions: iotNames,
-        specialOptions: specialNames
+        specialOptions: specialNames,
+        storageOption: storageOptionName
       },
       contactInfo: {
         phoneNumber,
@@ -200,6 +246,7 @@ const PriceEstimate = () => {
     // Convert option IDs to display names
     const iotNames = iotOptions.map(id => iotOptionsList.find(opt => opt.id === id)?.name || id);
     const specialNames = specialOptions.map(id => specialOptionsList.find(opt => opt.id === id)?.name || id);
+    const storageOptionName = storageOption ? storageOptionsList.find(opt => opt.id === storageOption)?.name || storageOption : '';
     
     // Submit as quick estimate with converted = false
     const formData = {
@@ -208,8 +255,11 @@ const PriceEstimate = () => {
         cameraType,
         indoorCount,
         outdoorCount,
+        ptzCount,
+        monitorInstall,
         iotOptions: iotNames,
-        specialOptions: specialNames
+        specialOptions: specialNames,
+        storageOption: storageOptionName
       },
       contactInfo: {
         phoneNumber: '',
@@ -256,6 +306,8 @@ const PriceEstimate = () => {
     setCameraType('210만');
     setIndoorCount(0);
     setOutdoorCount(0);
+    setPtzCount(0);
+    setMonitorInstall(false);
     setIotOptions([]);
     setSpecialOptions([]);
     setPhoneNumber('010-');
@@ -409,42 +461,132 @@ const PriceEstimate = () => {
 
             {/* IoT and Special Options */}
             <div className="options-row">
-              <div className="iot-section">
-                <h3>IoT 추가 (복수 선택 가능)</h3>
-                <div className="options-grid">
-                  {iotOptionsList.map(option => (
-                    <div 
-                      key={option.id}
-                      className={`option-box ${iotOptions.includes(option.id) ? 'selected' : ''}`}
-                      onClick={() => toggleIotOption(option.id)}
-                    >
-                      {iotOptions.includes(option.id) && (
-                        <div className="check-circle">✓</div>
-                      )}
-                      <img src={process.env.PUBLIC_URL + option.image} alt={option.name} />
-                      <p>{option.name}</p>
+              <div className="left-options">
+                <div className="ptz-section">
+                  <div className="ptz-header">
+                    <span>PTZ 줌 카메라 추가</span>
+                    <div className="quantity-controls">
+                      <button onClick={() => setPtzCount(Math.max(0, ptzCount - 1))}>-</button>
+                      <span>{ptzCount}</span>
+                      <button onClick={() => setPtzCount(ptzCount + 1)}>+</button>
                     </div>
-                  ))}
+                  </div>
                 </div>
+
+                <div className="monitor-section">
+                  <div className="monitor-header">
+                    <span>모니터 설치가 필요하신가요?</span>
+                    <label className="monitor-checkbox">
+                      <input 
+                        type="checkbox" 
+                        checked={monitorInstall}
+                        onChange={(e) => setMonitorInstall(e.target.checked)}
+                      />
+                      <span>네</span>
+                    </label>
+                  </div>
+                </div>
+
+              <div className="iot-section">
+                <h3 
+                  className="iot-header clickable"
+                  onClick={toggleIotSection}
+                >
+                  <div className="header-content">
+                    <span>알람센서 옵션추가</span>
+                    {!showIotOptions && iotOptions.length > 0 && (
+                      <span className="selected-summary">
+                        {iotOptions.map(id => iotOptionsList.find(o => o.id === id)?.name).join(', ')}
+                      </span>
+                    )}
+                  </div>
+                  <span className={`expand-arrow ${showIotOptions ? 'expanded' : ''}`}>▼</span>
+                </h3>
+                {showIotOptions && (
+                  <div className="options-grid">
+                    {iotOptionsList.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`option-box ${iotOptions.includes(option.id) ? 'selected' : ''}`}
+                        onClick={() => toggleIotOption(option.id)}
+                      >
+                        {iotOptions.includes(option.id) && (
+                          <div className="check-circle">✓</div>
+                        )}
+                        <img src={process.env.PUBLIC_URL + option.image} alt={option.name} />
+                        <p>{option.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="storage-section">
+                <h3 
+                  className="storage-header clickable"
+                  onClick={toggleStorageSection}
+                >
+                  <div className="header-content">
+                    <span>저장용량 선택</span>
+                    {!showStorageOptions && storageOption && (
+                      <span className="selected-summary">
+                        {storageOptionsList.find(o => o.id === storageOption)?.name}
+                      </span>
+                    )}
+                  </div>
+                  <span className={`expand-arrow ${showStorageOptions ? 'expanded' : ''}`}>▼</span>
+                </h3>
+                {showStorageOptions && (
+                  <div className="storage-options">
+                    {storageOptionsList.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`storage-option ${storageOption === option.id ? 'selected' : ''}`}
+                        onClick={() => setStorageOption(storageOption === option.id ? '' : option.id)}
+                      >
+                        <div className="radio-circle">
+                          {storageOption === option.id && <span className="checkmark">✓</span>}
+                        </div>
+                        <span>{option.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="special-section">
-                <h3>특수 공사</h3>
-                <div className="special-options">
-                  {specialOptionsList.map(option => (
-                    <div 
-                      key={option.id}
-                      className={`special-option ${specialOptions.includes(option.id) ? 'selected' : ''}`}
-                      onClick={() => toggleSpecialOption(option.id)}
-                    >
-                      <div className="radio-circle">
-                        {specialOptions.includes(option.id) && <span className="checkmark">✓</span>}
+                <h3 
+                  className="special-header clickable"
+                  onClick={toggleSpecialSection}
+                >
+                  <div className="header-content">
+                    <span>특수 공사</span>
+                    {!showSpecialOptions && specialOptions.length > 0 && (
+                      <span className="selected-summary">
+                        {specialOptions.map(id => specialOptionsList.find(o => o.id === id)?.name).join(', ')}
+                      </span>
+                    )}
+                  </div>
+                  <span className={`expand-arrow ${showSpecialOptions ? 'expanded' : ''}`}>▼</span>
+                </h3>
+                {showSpecialOptions && (
+                  <div className="special-options">
+                    {specialOptionsList.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`special-option ${specialOptions.includes(option.id) ? 'selected' : ''}`}
+                        onClick={() => toggleSpecialOption(option.id)}
+                      >
+                        <div className="radio-circle">
+                          {specialOptions.includes(option.id) && <span className="checkmark">✓</span>}
+                        </div>
+                        <span>{option.name}</span>
                       </div>
-                      <span>{option.name}</span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
             </div>
 
             {/* Submit Button */}
@@ -494,12 +636,24 @@ const PriceEstimate = () => {
                   <span>{calculatePrice().toLocaleString()}원 /월</span>
                 </div>
               )}
+              {ptzCount > 0 && (
+                <div className="price-item">
+                  <span>PTZ 줌 카메라 {ptzCount}대</span>
+                  <span>문의</span>
+                </div>
+              )}
+              {monitorInstall && (
+                <div className="price-item">
+                  <span>모니터 설치</span>
+                  <span>문의</span>
+                </div>
+              )}
               {iotOptions.map(optionId => {
                 const option = iotOptionsList.find(o => o.id === optionId);
                 return (
                   <div key={optionId} className="price-item">
                     <span>{option?.name}</span>
-                    <span>시세변동</span>
+                    <span>문의</span>
                   </div>
                 );
               })}
@@ -508,10 +662,16 @@ const PriceEstimate = () => {
                 return (
                   <div key={optionId} className="price-item">
                     <span>{option?.name}</span>
-                    <span>시세변동</span>
+                    <span>문의</span>
                   </div>
                 );
               })}
+              {storageOption && (
+                <div className="price-item">
+                  <span>저장용량 추가: {storageOptionsList.find(o => o.id === storageOption)?.name}</span>
+                  <span>문의</span>
+                </div>
+              )}
               <p className="price-note">
                 *가입 후에는 가격 인상 없이 최초 상담 내용 그대로 유지 됩니다.*<br/>
                 *난이도가 높지 않은 기본 설치는 추가 설치비 없이 진행 됩니다.*
@@ -548,6 +708,22 @@ const PriceEstimate = () => {
               )}
               <div className="divider"></div>
               <p><strong>추가 사항</strong></p>
+              {ptzCount > 0 && (
+                <>
+                  <p>PTZ 줌 카메라:</p>
+                  <ul>
+                    <li>{ptzCount}대</li>
+                  </ul>
+                </>
+              )}
+              {monitorInstall && (
+                <>
+                  <p>모니터 설치:</p>
+                  <ul>
+                    <li>예</li>
+                  </ul>
+                </>
+              )}
               <p>IoT :</p>
               <ul>
                 {iotOptions.map(optionId => {
@@ -562,6 +738,14 @@ const PriceEstimate = () => {
                   return <li key={optionId}>{option?.name}</li>;
                 })}
               </ul>
+              {storageOption && (
+                <>
+                  <p>저장용량 추가:</p>
+                  <ul>
+                    <li>{storageOptionsList.find(o => o.id === storageOption)?.name}</li>
+                  </ul>
+                </>
+              )}
             </div>
             <button className="edit-button" onClick={() => setStep(1)}>
               상담 내용 편집
@@ -636,13 +820,14 @@ const PriceEstimate = () => {
             </div>
 
             <div className="form-field">
-              <label className="checkbox-label">
+              <label className="checkbox-label privacy-checkbox">
                 <input 
                   type="checkbox" 
                   checked={privacyConsent}
                   onChange={(e) => setPrivacyConsent(e.target.checked)}
                 />
-                개인 정보 수집 동의 자세히보기
+                <span>개인 정보 수집 동의</span>
+                <span className="detail-link" onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}>자세히보기</span>
               </label>
             </div>
 
@@ -752,6 +937,42 @@ const PriceEstimate = () => {
               disabled={!selectedDate || !selectedTime}
             >
               신청하기
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Privacy Policy Modal */}
+      {showPrivacyModal && (
+        <div className="privacy-modal-overlay" onClick={() => setShowPrivacyModal(false)}>
+          <div className="privacy-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>개인정보 수집 및 이용 동의</h3>
+            <div className="privacy-content">
+              <p><strong>1. 수집하는 개인정보 항목</strong></p>
+              <ul>
+                <li>연락처 (전화번호)</li>
+                <li>설치 희망 주소</li>
+                <li>설치 희망 일시</li>
+              </ul>
+              
+              <p><strong>2. 개인정보의 수집 및 이용 목적</strong></p>
+              <ul>
+                <li>CCTV 설치 상담 및 견적 안내</li>
+                <li>설치 일정 조율</li>
+                <li>서비스 관련 연락</li>
+              </ul>
+              
+              <p><strong>3. 개인정보의 보유 및 이용 기간</strong></p>
+              <ul>
+                <li>상담 완료 후 1년간 보관</li>
+                <li>동의 철회 시 즉시 파기</li>
+              </ul>
+              
+              <p><strong>4. 동의 거부 권리</strong></p>
+              <p>개인정보 수집에 동의하지 않을 권리가 있으나, 동의 거부 시 상담 신청이 제한됩니다.</p>
+            </div>
+            <button className="privacy-close-btn" onClick={() => setShowPrivacyModal(false)}>
+              확인
             </button>
           </div>
         </div>

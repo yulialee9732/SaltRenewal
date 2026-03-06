@@ -126,6 +126,22 @@ const addPriceEstimate = async (data) => {
       return `${day}.${month}.${year} ${hour}:${minute}`;
     };
     
+    // Build memo field (combine storage option, PTZ count, monitor install, and duplicate memo)
+    const memoItems = [];
+    if (currentSelection.ptzCount && currentSelection.ptzCount > 0) {
+      memoItems.push(`PTZ 줌 카메라 ${currentSelection.ptzCount}대`);
+    }
+    if (currentSelection.monitorInstall) {
+      memoItems.push('모니터 설치');
+    }
+    if (currentSelection.storageOption) {
+      memoItems.push(currentSelection.storageOption);
+    }
+    if (duplicateMemo) {
+      memoItems.push(duplicateMemo);
+    }
+    const memoField = memoItems.length > 0 ? memoItems.join(', ') : '-';
+    
     // Column order: 현황/시간/경로/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/인입 폼/IP
     const row = [
       '대기중', // 현황 - default status
@@ -142,7 +158,7 @@ const addPriceEstimate = async (data) => {
       currentSelection.iotOptions && currentSelection.iotOptions.length > 0 ? currentSelection.iotOptions.join(', ') : '-', // IoT
       currentSelection.specialOptions && currentSelection.specialOptions.length > 0 ? currentSelection.specialOptions.join(', ') : '-', // 특수공사
       contactInfo.hasInternet || '-', // 인터넷
-      duplicateMemo || '-', // 메모
+      memoField, // 메모 (storage option + duplicate info)
       formType, // 인입 폼
       ipAddress || '-' // IP
     ];
