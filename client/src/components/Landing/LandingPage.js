@@ -858,39 +858,82 @@ const LandingPage = () => {
       </div>
       
       <PriceEstimate />
-      
-      <div id="packages-section" className="packages-section">
-        <div className="packages-container">
-          <h2 className="packages-title">추천 패키지</h2>
-          <p className="packages-subtitle">고객님의 매장 규모에 맞는 최적의 보안 솔루션을 제공합니다</p>
+
+      {/* Security Combinations Section */}
+      <div id="combinations-section" className="combinations-section">
+        <div className="combinations-container">
+          <h2 className="combinations-title">맞춤형 보안 솔루션</h2>
+          <p className="combinations-subtitle">고객님의 환경에 맞는 최적의 보안 구성을 선택하세요</p>
           
-          <div className="packages-grid">
-            <div className="package-wrapper">
-              <h3 className="package-item-title">20평대 소형 매장</h3>
-              <div className="package-item">
-                <img src={`${process.env.PUBLIC_URL}/img/main-package/pckg1.png`} alt="20평대 소형 매장" />
+          <div className="combinations-grid">
+            {/* 가성비 구성 */}
+            <div className="combination-card">
+              <div className="combination-badge">BASIC</div>
+              <h3 className="combination-name">가성비 구성</h3>
+              <div className="combination-items">
+                <div className="combination-item main">
+                  <span className="item-icon">📹</span>
+                  <div className="item-content">
+                    <span className="item-text">카메라 4대</span>
+                    <span className="item-options">210만화소 / 500만화소 중 선택</span>
+                  </div>
+                </div>
               </div>
+              <p className="combination-desc">기본적인 영상 감시가 필요한 소규모 매장에 적합</p>
             </div>
-            
-            <div className="package-wrapper">
-              <h3 className="package-item-title">30 ~ 40평대 중형 매장</h3>
-              <div className="package-item">
-                <img src={`${process.env.PUBLIC_URL}/img/main-package/pckg2.png`} alt="30 ~ 40평대 중형 매장" />
+
+            {/* 카메라 + IoT센서 결합 */}
+            <div className="combination-card featured">
+              <div className="combination-badge">POPULAR</div>
+              <h3 className="combination-name">카메라 + IoT센서</h3>
+              <div className="combination-items">
+                <div className="combination-item main">
+                  <span className="item-icon">📹</span>
+                  <div className="item-content">
+                    <span className="item-text">실내카메라 4대</span>
+                    <span className="item-options">210만화소 / 500만화소 중 선택</span>
+                  </div>
+                </div>
+                <div className="combination-divider">+</div>
+                <div className="combination-item optional">
+                  <span className="item-icon">🚪</span>
+                  <span className="item-text">문열림 감지 센서</span>
+                  <span className="item-label">옵션</span>
+                </div>
+                <div className="combination-item optional">
+                  <span className="item-icon">🔥</span>
+                  <span className="item-text">화재 감지 센서</span>
+                  <span className="item-label">옵션</span>
+                </div>
               </div>
+              <p className="combination-desc">종합적인 안전 관리가 필요한 중형 매장에 최적</p>
             </div>
-            
-            <div className="package-wrapper">
-              <h3 className="package-item-title">40평 ~ 100평 미만 대형 매장</h3>
-              <div className="package-item">
-                <img src={`${process.env.PUBLIC_URL}/img/main-package/pckg3.png`} alt="40평 ~ 100평 미만 대형 매장" />
+
+            {/* 카메라 + 출입통제 + IoT센서 결합 */}
+            <div className="combination-card premium">
+              <div className="combination-badge">PREMIUM</div>
+              <h3 className="combination-name">카메라 + 출입통제 + IoT센서</h3>
+              <div className="combination-items">
+                <div className="combination-item main">
+                  <span className="item-icon">📹</span>
+                  <div className="item-content">
+                    <span className="item-text">실내카메라 8대</span>
+                    <span className="item-options">210만화소 / 500만화소 중 선택</span>
+                  </div>
+                </div>
+                <div className="combination-divider">+</div>
+                <div className="combination-item optional">
+                  <span className="item-icon">🔐</span>
+                  <span className="item-text">지문형 or 카드형 출입통제</span>
+                  <span className="item-label">옵션</span>
+                </div>
+                <div className="combination-item optional">
+                  <span className="item-icon">🔥</span>
+                  <span className="item-text">화재 감지 센서</span>
+                  <span className="item-label">옵션</span>
+                </div>
               </div>
-            </div>
-            
-            <div className="package-wrapper">
-              <h3 className="package-item-title">무인 매장</h3>
-              <div className="package-item">
-                <img src={`${process.env.PUBLIC_URL}/img/main-package/pckg4.png`} alt="무인 매장" />
-              </div>
+              <p className="combination-desc">대형 매장 및 기업을 위한 통합 보안 솔루션</p>
             </div>
           </div>
         </div>
