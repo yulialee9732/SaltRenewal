@@ -1,145 +1,135 @@
-# MERN Stack - Customer & Employee Portal
+# SaltRenewal — Customer & Employee Service Portal
 
-A full-stack MERN application with separate customer and employee portals for managing service requests and contact forms.
+A full-stack MERN web application built for **SaltRenewal**, a Korean-owned home services company. It provides a customer-facing portal for submitting price estimates and service requests, and an internal employee dashboard for managing and tracking those submissions.
+
+---
+
+## What This Project Does
+
+Customers visit the landing page, fill out a price estimate form or service inquiry, and submit it. The submission is saved to MongoDB and optionally synced to a Google Sheets spreadsheet for internal tracking. Employees log in separately to view, manage, and update all incoming submissions in real time.
+
+---
+
+## Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|---|---|
+| **React** | UI component library |
+| **React Router v6** | Client-side routing |
+| **Axios** | HTTP requests to the API |
+| **Context API** | Global auth state management |
+
+### Backend
+| Technology | Purpose |
+|---|---|
+| **Node.js + Express.js** | REST API server |
+| **MongoDB Atlas** | Cloud database |
+| **Mongoose** | MongoDB object modeling (ODM) |
+| **JWT (jsonwebtoken)** | Authentication tokens |
+| **bcryptjs** | Password hashing |
+| **nodemailer / Resend** | Email notifications |
+| **Google Sheets API** | Real-time spreadsheet sync (optional) |
+| **node-cron** | Scheduled background tasks |
+
+### Deployment
+| Service | Purpose |
+|---|---|
+| **Netlify** | Frontend hosting |
+| **Render / Railway** | Backend API hosting |
+| **MongoDB Atlas** | Database hosting |
+
+---
+
+## How It Works
+
+```
+User Browser
+    │
+    ▼
+React App (Netlify)
+    │  Axios HTTP requests
+    ▼
+Express REST API (Node.js)
+    │              │
+    ▼              ▼
+MongoDB Atlas   Google Sheets API
+(primary DB)    (optional sync)
+```
+
+1. **Landing page** — Visitors see service offerings and can request a price estimate
+2. **Price estimate form** — Submitted data is saved to MongoDB and synced to Google Sheets
+3. **Authentication** — JWT tokens are issued on login; role-based access controls what each user sees
+4. **Customer dashboard** — Customers can view their own submissions and track status
+5. **Employee dashboard** — Employees see all submissions, can update status, add notes, and manage records
+
+---
 
 ## Features
 
 ### Customer Portal
-- User registration and authentication
-- Submit A/S (After-Sales) service requests
-- Submit contact forms
-- View own service requests and contact forms
-- Track status of submissions
+- Register and log in with a secure account
+- Submit price estimate requests with detailed service options
+- View and track the status of their own submissions
 
 ### Employee Portal
-- Employee authentication
-- View all service requests from all customers
-- View all contact forms from all customers
-- Edit and update service requests (with notes)
-- Edit and update contact forms (with notes)
-- View edit history with timestamps and editor information
-- Delete requests and forms
-- Change status and priority of requests
+- Separate employee login with role-based access
+- View all customer submissions in one dashboard
+- Update status, add internal notes, and manage records
+- Edit history tracked with timestamps and editor info
+- Real-time notifications for new submissions
 
-## Tech Stack
+### Integrations
+- **Google Sheets** — All form submissions optionally synced in real time for non-technical staff
+- **Email notifications** — Automated emails via Nodemailer/Resend on new submissions
 
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB** - Database (MongoDB Atlas)
-- **Mongoose** - ODM
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **nodemailer** - Email notifications
-- **Google Sheets API** - Form submission tracking (optional)
+---
 
-### Frontend
-- **React** - UI library
-- **React Router** - Routing
-- **Axios** - HTTP client
-- **Context API** - State management
-
-## New Features
-
-### 🎯 Google Sheets Integration
-All form submissions are now automatically saved to Google Sheets in real-time:
-- Price Estimate submissions
-- Service Request submissions
-- Contact Form submissions
-
-**Setup Guide:** See [GOOGLE_SHEETS_SETUP.md](./GOOGLE_SHEETS_SETUP.md) for detailed instructions.
-**Quick Start:** See [GOOGLE_SHEETS_QUICK_START.md](./GOOGLE_SHEETS_QUICK_START.md) for a 5-minute setup guide.
-
-> **Note:** Google Sheets integration is optional. The app works perfectly without it, saving all data to MongoDB.
-
-## Installation
+## Getting Started
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB Atlas account (free tier available)
+- Node.js v14 or higher
+- MongoDB Atlas account (free tier works)
 - npm or yarn
 
-### Setup
-
-1. **Clone the repository**
+### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd mern-app
+git clone git@github.com:yulialee9732/SaltRenewal.git
+cd SaltRenewal/mern-app
 ```
 
-2. **Install server dependencies**
+### 2. Set up the server
 ```bash
 cd server
 npm install
-```
-
-3. **Configure environment variables**
-
-Create a `.env` file in the `server` directory (copy from `.env.example`):
-
-```bash
 cp .env.example .env
 ```
 
-Edit `server/.env` file with your credentials:
-```
+Edit `server/.env` with your credentials:
+```env
 PORT=5001
-MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/mern-app?retryWrites=true&w=majority
-JWT_SECRET=your_super_secret_jwt_key_here
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mern-app
+JWT_SECRET=your_secret_key_here
 JWT_EXPIRE=7d
 NODE_ENV=development
 ```
 
-**Important:** 
-- Replace `username:password` with your MongoDB Atlas credentials
-- If your password contains special characters, URL encode them:
-  - `!` = `%21`
-  - `@` = `%40`
-  - `#` = `%23`
-  - `$` = `%24`
-- Generate a strong random JWT_SECRET (recommended: use `openssl rand -base64 32`)
+> Tip: Generate a strong JWT secret with `openssl rand -base64 32`
 
-4. **Install client dependencies**
+### 3. Set up the client
 ```bash
 cd ../client
 npm install
 ```
 
-### MongoDB Atlas Setup
-
-1. Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
-2. Create a new cluster (M0 free tier)
-3. Set up Database Access:
-   - Add a new database user
-   - Set username and password
-   - Grant "Read and write to any database" privileges
-4. Set up Network Access:
-   - Add IP address
-   - For development, you can allow access from anywhere (0.0.0.0/0)
-   - For production, restrict to your server's IP
-5. Get your connection string:
-   - Click "Connect" on your cluster
-   - Choose "Connect your application"
-   - Copy the connection string
-   - Replace `<password>` with your database user password
-
-## Running the Application
-
-### Development Mode
-
-1. **Start the server** (from server directory)
+### 4. Run in development
 ```bash
-cd server
-npm run dev
-```
-Server runs on http://localhost:5001
+# Terminal 1 — start backend
+cd server && npm run dev       # runs on http://localhost:5001
 
-2. **Start the client** (from client directory, in a new terminal)
-```bash
-cd client
-npm start
+# Terminal 2 — start frontend
+cd client && npm start         # runs on http://localhost:3000
 ```
-Client runs on http://localhost:3000
 
 ## API Endpoints
 
