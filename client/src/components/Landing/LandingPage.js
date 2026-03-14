@@ -582,9 +582,9 @@ const LandingPage = () => {
         indoorCount: consultationForm.indoorCount,
         outdoorCount: consultationForm.outdoorCount
       },
-      appointment: consultationSelectedDate && consultationSelectedTime ? {
+      appointment: consultationSelectedDate ? {
         date: consultationSelectedDate.toISOString(),
-        time: consultationSelectedTime
+        time: consultationSelectedTime || '미정'
       } : null,
       consultationRequest: true,
       submittedAt: new Date().toISOString()
@@ -1679,7 +1679,8 @@ const LandingPage = () => {
                 <span>평일 오전 9시 ~ 오후 6시</span>
               </div>
             </button>
-            <button
+            {/* TODO: Re-enable 상담원과 채팅하기 after improvements */}
+            {false && <button
               className="chat-menu-option"
               onClick={() => {
                 if (isWithinChatHours()) {
@@ -1699,7 +1700,7 @@ const LandingPage = () => {
                   <span style={{ color: '#e53935' }}>지금은 상담 시간이 아닙니다.<br />이용시간: 평일 오전 10시 ~ 오후 6시</span>
                 )}
               </div>
-            </button>
+            </button>}
             <button className="chat-menu-option" onClick={() => { setShowChatMenu(false); setShowQuestionForm(true); }}>
               <div className="menu-icon">📝</div>
               <div className="menu-text">

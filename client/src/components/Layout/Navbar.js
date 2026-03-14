@@ -89,17 +89,13 @@ const Navbar = () => {
           <a href="#consultation-section" className="navbar-service-link" onClick={handleMenuClick}>
             상담 신청
           </a>
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <>
               <span className="navbar-user">{user?.name}님</span>
               <button onClick={handleLogout} className="navbar-link logout-btn">
                 로그아웃
               </button>
             </>
-          ) : (
-            <Link to="/login" className="navbar-link navbar-login" onClick={handleMenuClick}>
-              로그인
-            </Link>
           )}
         </div>
       </div>

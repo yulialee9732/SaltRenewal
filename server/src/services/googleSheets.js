@@ -155,7 +155,7 @@ const addPriceEstimate = async (data) => {
       contactInfo.locationType || '-', // 타입
       contactInfo.address || '-', // 주소
       appointment?.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : '-', // 희망날짜
-      appointment?.time || '-', // 희망시간
+      (appointment?.time && appointment.time !== '') ? appointment.time : '-', // 희망시간
       currentSelection.cameraType || initialSelection?.cameraType || '-', // 화소
       currentSelection.outdoorCount || 0, // 실외
       currentSelection.indoorCount || 0, // 실내
@@ -519,9 +519,9 @@ const addCustomerQuestion = async (data) => {
     const { phone, question, ipAddress, mongoId } = data;
     const timestamp = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
 
-    // Row format: MongoDB ID / 시간 / 연락처 / 질문 / 읽음 / IP주소
+    // Row format: 현황 / 시간 / 연락처 / 질문 / 읽음 / IP주소
     const row = [
-      mongoId || '',
+      '대기중', // 현황
       timestamp,
       phone || '',
       question || '',
@@ -557,7 +557,7 @@ const addCustomerQuestion = async (data) => {
         range: `${sheetName}!A1:F1`,
         valueInputOption: 'USER_ENTERED',
         resource: {
-          values: [['ID', '시간', '연락처', '질문', '읽음', 'IP주소']],
+          values: [['현황', '시간', '연락처', '질문', '읽음', 'IP주소']],
         },
       });
 
