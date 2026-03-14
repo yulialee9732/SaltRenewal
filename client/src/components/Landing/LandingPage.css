@@ -561,6 +561,27 @@ html {
 }
 
 @media (max-width: 768px) {
+  .client-logos-section {
+    padding: 60px 15px;
+  }
+
+  .client-logos-label {
+    font-size: 1.8rem;
+  }
+
+  .client-logos-sublabel {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+
+  .client-logo-item img {
+    height: 60px;
+  }
+
+  .client-logo-item {
+    padding: 0 10px;
+  }
+
   .price-chart-section {
     padding: 60px 15px;
   }
