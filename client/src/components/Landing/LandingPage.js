@@ -743,6 +743,43 @@ const LandingPage = () => {
         </div>
       </div>
 
+      {/* Client Logos Section */}
+      {(() => {
+        const companyLogos = [
+          { src: 'img/companies/7-Eleven-Logo.png', alt: '세븐일레븐' },
+          { src: 'img/companies/760001_468765_471.gif', alt: '나들가게' },
+          { src: 'img/companies/MINISTOP_logo.svg', alt: '미니스톱' },
+          { src: 'img/companies/culogo.svg', alt: 'CU' },
+          { src: 'img/companies/emart24.webp', alt: '이마트24' },
+          { src: 'img/companies/kisa-logo.png', alt: 'KISA' },
+          { src: 'img/companies/ssgi.jpeg', alt: 'SSG' },
+          { src: 'img/companies/Bg_spcCi.jpg', alt: 'BGF' },
+          { src: 'img/companies/nollarva.png', alt: '놀라바' },
+          { src: 'img/companies/TubaN.webp', alt: '튜반' },
+        ];
+        return (
+          <div className="client-logos-section">
+            <p className="client-logos-label">솔트를 선택한 기업들</p>
+            <p className="client-logos-sublabel">다양한 분야의 기업들이 솔트와 함께하고 있습니다</p>
+            <div className="client-logos-track-wrapper">
+              <div className="client-logos-track">
+                {companyLogos.map((logo, i) => (
+                  <div key={i} className="client-logo-item">
+                    <img src={`${process.env.PUBLIC_URL}/${logo.src}`} alt={logo.alt} />
+                  </div>
+                ))}
+                {/* Duplicate for seamless loop */}
+                {companyLogos.map((logo, i) => (
+                  <div key={`dup-${i}`} className="client-logo-item">
+                    <img src={`${process.env.PUBLIC_URL}/${logo.src}`} alt={logo.alt} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Price Chart Section */}
       <div className="price-chart-section">
         <div className="price-chart-container">
