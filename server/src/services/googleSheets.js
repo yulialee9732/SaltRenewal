@@ -123,7 +123,7 @@ const addPriceEstimate = async (data) => {
       const year = d.toLocaleString('en-US', { ...options, year: 'numeric' });
       const hour = d.toLocaleString('en-US', { ...options, hour: '2-digit', hour12: false });
       const minute = d.toLocaleString('en-US', { ...options, minute: '2-digit' });
-      return `${day}.${month}.${year} ${hour}:${minute}`;
+      return `${month}.${day}.${year} ${hour}:${minute}`;
     };
     
     // Build memo field (combine storage option, PTZ count, monitor install, and duplicate memo)
@@ -257,22 +257,25 @@ const setupSheetHeaders = async () => {
       '메모'
     ]];
 
-    // SALT/KT 상담신청 headers: IP / 시간 / 화소 / 연락처 / 주소 / 타입 / 실내 / 실외 / IoT / 특수공사 / 인터넷 / 희망날짜 / 희망 시간 / 메모
+    // SALT/KT 상담신청 headers: 현황/시간/경로/연락처/타입/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/인입 폼/IP
     const consultationHeaders = [[
-      'IP 주소',
+      '현황',
       '시간',
-      '화소',
+      '경로',
       '연락처',
-      '주소',
       '타입',
-      '실내',
+      '주소',
+      '희망날짜',
+      '희망 시간',
+      '화소',
       '실외',
+      '실내',
       'IoT',
       '특수공사',
       '인터넷',
-      '희망날짜',
-      '희망 시간',
-      '메모'
+      '메모',
+      '인입 폼',
+      'IP'
     ]];
 
     // Update headers for all sheets
@@ -287,7 +290,7 @@ const setupSheetHeaders = async () => {
 
     await sheets.spreadsheets.values.update({
       spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-      range: 'SALT 상담신청!A1:N1',
+      range: 'SALT 상담신청!A1:Q1',
       valueInputOption: 'USER_ENTERED',
       resource: {
         values: consultationHeaders,
@@ -296,7 +299,7 @@ const setupSheetHeaders = async () => {
 
     await sheets.spreadsheets.values.update({
       spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-      range: 'KT 상담신청!A1:N1',
+      range: 'KT 상담신청!A1:Q1',
       valueInputOption: 'USER_ENTERED',
       resource: {
         values: consultationHeaders,
