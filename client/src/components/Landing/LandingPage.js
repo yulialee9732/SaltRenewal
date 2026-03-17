@@ -712,7 +712,7 @@ const LandingPage = () => {
           {/* Main Title - center */}
           <div className="main-hero-title">
             <p>• 기본 공사 무료 설치<br className="mobile-br" /> • 고장 시 출장 A/S 무료<br className="mobile-br" /> • 36개월 약정 • 렌탈형</p>
-            <h1><span>카메라 4대</span>를 <br className="mobile-br" /><span>월 33,000원</span>에 이용하세요!</h1>
+            <h1><span>카메라 4대</span>를 <br className="mobile-br" /><span>월 30,000원</span>에 이용하세요!</h1>
             <h2>상담 문의 1522-0687</h2>
           </div>
           
