@@ -19,7 +19,10 @@ const initializeEmail = async () => {
     }
 
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
       auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASS
@@ -220,7 +223,7 @@ if (require.main === module) {
       console.log('📧 Sending test email...');
       await sendFormNotification({
         formType: '테스트',
-        phoneNumber: '010-1234-5678',
+        phoneNumber: '010-0000-0000',
         address: '서울시 테스트구',
         locationType: '가정집',
         appointmentDate: '2026-03-05',
