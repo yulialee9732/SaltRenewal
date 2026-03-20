@@ -1,26 +1,33 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 // Email recipients
 const NOTIFICATION_EMAILS = ['2hh9732@gmail.com', 'yulialee217@gmail.com'];
 
-// Create Resend client
-let resend = null;
+// Create transporter
+let transporter = null;
 
 const initializeEmail = async () => {
   try {
-    const RESEND_API_KEY = process.env.RESEND_API_KEY;
-    
-    console.log('📧 Email config check:', RESEND_API_KEY ? 'RESEND_API_KEY found' : 'RESEND_API_KEY missing');
-    
-    if (!RESEND_API_KEY) {
-      console.warn('⚠️  Resend API key not configured. Email notifications disabled.');
+    const EMAIL_USER = process.env.EMAIL_USER;
+    const EMAIL_PASS = process.env.EMAIL_PASS;
+
+    console.log('📧 Email config check:', EMAIL_USER ? 'EMAIL_USER found' : 'EMAIL_USER missing');
+
+    if (!EMAIL_USER || !EMAIL_PASS) {
+      console.warn('⚠️  Gmail credentials not configured. Email notifications disabled.');
       return null;
     }
-    
-    resend = new Resend(RESEND_API_KEY);
-    
-    console.log('✅ Email service initialized (Resend)');
-    return resend;
+
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
+      }
+    });
+
+    console.log('✅ Email service initialized (Nodemailer/Gmail)');
+    return transporter;
   } catch (error) {
     console.error('❌ Email service error:', error.message);
     return null;
@@ -30,9 +37,9 @@ const initializeEmail = async () => {
 // Send form submission notification
 const sendFormNotification = async (formData) => {
   try {
-    if (!resend) {
-      resend = await initializeEmail();
-      if (!resend) return;
+    if (!transporter) {
+      transporter = await initializeEmail();
+      if (!transporter) return;
     }
     
     const {
@@ -140,15 +147,15 @@ const sendFormNotification = async (formData) => {
       </div>
     `;
     
-    console.log('📧 Attempting to send form notification email via Resend...');
-    const result = await resend.emails.send({
-      from: 'SALT <noreply@saltcctv.com>',
-      to: NOTIFICATION_EMAILS,
+    console.log('📧 Attempting to send form notification email via Gmail...');
+    await transporter.sendMail({
+      from: `SALT <${process.env.EMAIL_USER}>`,
+      to: NOTIFICATION_EMAILS.join(', '),
       subject,
       html
     });
-    
-    console.log(`✅ Email notification sent for ${formType}, id: ${result.data?.id}`);
+
+    console.log(`✅ Email notification sent for ${formType}`);
   } catch (error) {
     console.error('❌ Error sending email notification:', error.message);
   }
@@ -156,9 +163,9 @@ const sendFormNotification = async (formData) => {
 
 const sendQuestionNotification = async (questionData) => {
   try {
-    if (!resend) {
-      resend = await initializeEmail();
-      if (!resend) return;
+    if (!transporter) {
+      transporter = await initializeEmail();
+      if (!transporter) return;
     }
     
     const { phone, question } = questionData;
@@ -185,13 +192,13 @@ const sendQuestionNotification = async (questionData) => {
       </div>
     `;
     
-    await resend.emails.send({
-      from: 'SALT <noreply@saltcctv.com>',
-      to: NOTIFICATION_EMAILS,
+    await transporter.sendMail({
+      from: `SALT <${process.env.EMAIL_USER}>`,
+      to: NOTIFICATION_EMAILS.join(', '),
       subject,
       html
     });
-    
+
     console.log('✅ Question notification email sent');
   } catch (error) {
     console.error('❌ Error sending question notification:', error.message);
