@@ -234,7 +234,7 @@ if (require.main === module) {
         submittedAt: new Date().toISOString()
       });
     } else {
-      console.log('\n❌ Email configuration failed. Check RESEND_API_KEY environment variable.');
+      console.log('\n❌ Email configuration failed. Check EMAIL_USER and EMAIL_PASS environment variables.');
     }
     process.exit(0);
   })();
