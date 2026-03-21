@@ -1,36 +1,26 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 // Email recipients
 const NOTIFICATION_EMAILS = ['2hh9732@gmail.com', 'yulialee217@gmail.com'];
 
-// Create transporter
-let transporter = null;
+// Create Resend client
+let resend = null;
 
 const initializeEmail = async () => {
   try {
-    const EMAIL_USER = process.env.EMAIL_USER;
-    const EMAIL_PASS = process.env.EMAIL_PASS;
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-    console.log('📧 Email config check:', EMAIL_USER ? 'EMAIL_USER found' : 'EMAIL_USER missing');
+    console.log('📧 Email config check:', RESEND_API_KEY ? 'RESEND_API_KEY found' : 'RESEND_API_KEY missing');
 
-    if (!EMAIL_USER || !EMAIL_PASS) {
-      console.warn('⚠️  Gmail credentials not configured. Email notifications disabled.');
+    if (!RESEND_API_KEY) {
+      console.warn('⚠️  Resend API key not configured. Email notifications disabled.');
       return null;
     }
 
-    transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASS
-      }
-    });
+    resend = new Resend(RESEND_API_KEY);
 
-    console.log('✅ Email service initialized (Nodemailer/Gmail)');
-    return transporter;
+    console.log('✅ Email service initialized (Resend)');
+    return resend;
   } catch (error) {
     console.error('❌ Email service error:', error.message);
     return null;
@@ -40,9 +30,9 @@ const initializeEmail = async () => {
 // Send form submission notification
 const sendFormNotification = async (formData) => {
   try {
-    if (!transporter) {
-      transporter = await initializeEmail();
-      if (!transporter) return;
+    if (!resend) {
+      resend = await initializeEmail();
+      if (!resend) return;
     }
     
     const {
@@ -150,10 +140,10 @@ const sendFormNotification = async (formData) => {
       </div>
     `;
     
-    console.log('📧 Attempting to send form notification email via Gmail...');
-    await transporter.sendMail({
-      from: `SALT <${process.env.EMAIL_USER}>`,
-      to: NOTIFICATION_EMAILS.join(', '),
+    console.log('📧 Attempting to send form notification email via Resend...');
+    await resend.emails.send({
+      from: `SALT <noreply@${process.env.RESEND_DOMAIN || 'resend.dev'}>`,
+      to: NOTIFICATION_EMAILS,
       subject,
       html
     });
@@ -166,9 +156,9 @@ const sendFormNotification = async (formData) => {
 
 const sendQuestionNotification = async (questionData) => {
   try {
-    if (!transporter) {
-      transporter = await initializeEmail();
-      if (!transporter) return;
+    if (!resend) {
+      resend = await initializeEmail();
+      if (!resend) return;
     }
     
     const { phone, question } = questionData;
@@ -195,9 +185,9 @@ const sendQuestionNotification = async (questionData) => {
       </div>
     `;
     
-    await transporter.sendMail({
-      from: `SALT <${process.env.EMAIL_USER}>`,
-      to: NOTIFICATION_EMAILS.join(', '),
+    await resend.emails.send({
+      from: `SALT <noreply@${process.env.RESEND_DOMAIN || 'resend.dev'}>`,
+      to: NOTIFICATION_EMAILS,
       subject,
       html
     });
@@ -237,7 +227,7 @@ if (require.main === module) {
         submittedAt: new Date().toISOString()
       });
     } else {
-      console.log('\n❌ Email configuration failed. Check EMAIL_USER and EMAIL_PASS environment variables.');
+      console.log('\n❌ Email configuration failed. Check RESEND_API_KEY environment variable.');
     }
     process.exit(0);
   })();
