@@ -36,7 +36,7 @@ Customers visit the landing page, fill out a price estimate form or service inqu
 | Service | Purpose |
 |---|---|
 | **Netlify** | Frontend hosting |
-| **Render / Railway** | Backend API hosting |
+| **Render** | Backend API hosting |
 | **MongoDB Atlas** | Database hosting |
 
 ---

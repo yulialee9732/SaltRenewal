@@ -65,7 +65,9 @@ const sendFormNotification = async (formData) => {
     if (outdoorCount > 0) cameraParts.push(`실외 ${outdoorCount}대`);
     const cameraCountStr = cameraParts.length > 0 ? cameraParts.join(', ') + ' 설치, ' : '';
     
-    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} ${cameraCountStr}공사희망일: ${appointmentDate || '-'}, 인터넷: ${hasInternet || '-'}`;
+    const appointmentDateOnly = appointmentDate ? appointmentDate.toString().slice(0, 10) : null;
+    const appointmentPart = appointmentDateOnly ? `공사희망일: ${appointmentDateOnly}, ` : '';
+    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} ${cameraCountStr}${appointmentPart}인터넷: ${hasInternet || '-'}`;
     
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
