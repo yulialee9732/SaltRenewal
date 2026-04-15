@@ -1,5 +1,6 @@
 const PriceEstimate = require('../models/PriceEstimate');
 const { addPriceEstimate, getAllSheetEstimates } = require('../services/googleSheets');
+const { sendFormNotification } = require('../services/emailService');
 
 // Helper function to validate phone number (must be 11 digits)
 const validatePhoneNumber = (phoneNumber) => {
@@ -33,8 +34,41 @@ exports.submitPriceEstimate = async (req, res) => {
     estimateData.type = 'full';
     estimateData.converted = true; // Full consultation is always a conversion
 
-    // ALWAYS update Google Sheets first (even if DB fails)
-    // (email notification is sent inside addPriceEstimate)
+    // Determine form type
+    let formType;
+    if (estimateData.initialSelection) {
+      formType = '견적 확인형';
+    } else if (estimateData.scheduleOnly) {
+      formType = '날짜 예약형';
+    } else if (estimateData.consultationRequest) {
+      formType = '상담 신청형';
+    } else if (estimateData.appointment?.date && estimateData.appointment?.time) {
+      formType = '날짜 예약형';
+    } else {
+      formType = '상담 신청형';
+    }
+
+    // Send email notification (independent of sheets)
+    sendFormNotification({
+      formType,
+      phoneNumber: estimateData.contactInfo?.phoneNumber,
+      address: estimateData.contactInfo?.address,
+      locationType: estimateData.contactInfo?.locationType,
+      appointmentDate: estimateData.appointment?.date || null,
+      appointmentTime: estimateData.appointment?.time,
+      cameraType: estimateData.currentSelection?.cameraType || estimateData.initialSelection?.cameraType,
+      outdoorCount: estimateData.currentSelection?.outdoorCount,
+      indoorCount: estimateData.currentSelection?.indoorCount,
+      iotOptions: estimateData.currentSelection?.iotOptions?.join(', '),
+      specialOptions: estimateData.currentSelection?.specialOptions?.join(', '),
+      hasInternet: estimateData.contactInfo?.hasInternet,
+      ptzCount: estimateData.currentSelection?.ptzCount,
+      storageOption: estimateData.currentSelection?.storageOption,
+      monitorInstall: estimateData.currentSelection?.monitorInstall,
+      submittedAt: estimateData.submittedAt
+    }).catch(err => console.error('Email notification error:', err.message));
+
+    // Update Google Sheets (fire and forget)
     addPriceEstimate(estimateData).catch(err => 
       console.error('Google Sheets error:', err.message)
     );
@@ -94,8 +128,27 @@ exports.submitQuickEstimate = async (req, res) => {
     estimateData.type = 'quick';
     estimateData.converted = true; // 간편신청 is always a conversion
 
-    // ALWAYS update Google Sheets first (even if DB fails)
-    // (email notification is sent inside addPriceEstimate)
+    // Send email notification (independent of sheets)
+    sendFormNotification({
+      formType: '간편견적',
+      phoneNumber: estimateData.contactInfo?.phoneNumber,
+      address: estimateData.contactInfo?.address,
+      locationType: estimateData.contactInfo?.locationType,
+      appointmentDate: estimateData.appointment?.date || null,
+      appointmentTime: estimateData.appointment?.time,
+      cameraType: estimateData.currentSelection?.cameraType,
+      outdoorCount: estimateData.currentSelection?.outdoorCount,
+      indoorCount: estimateData.currentSelection?.indoorCount,
+      iotOptions: estimateData.currentSelection?.iotOptions?.join(', '),
+      specialOptions: estimateData.currentSelection?.specialOptions?.join(', '),
+      hasInternet: estimateData.contactInfo?.hasInternet,
+      ptzCount: estimateData.currentSelection?.ptzCount,
+      storageOption: estimateData.currentSelection?.storageOption,
+      monitorInstall: estimateData.currentSelection?.monitorInstall,
+      submittedAt: estimateData.submittedAt
+    }).catch(err => console.error('Email notification error:', err.message));
+
+    // Update Google Sheets (fire and forget)
     addPriceEstimate(estimateData).catch(err => 
       console.error('Google Sheets error:', err.message)
     );

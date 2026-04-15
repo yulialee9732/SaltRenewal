@@ -1,5 +1,4 @@
 const { google } = require('googleapis');
-const { sendFormNotification } = require('./emailService');
 
 // Initialize Google Sheets API
 let sheets = null;
@@ -205,26 +204,6 @@ const addPriceEstimate = async (data) => {
     });
 
     console.log(`✅ ${formType} added to SALT 상담신청 (top row)`);
-    
-    // Send email notification
-    sendFormNotification({
-      formType,
-      phoneNumber: contactInfo.phoneNumber,
-      address: contactInfo.address,
-      locationType: contactInfo.locationType,
-      appointmentDate: appointment?.date || null,
-      appointmentTime: appointment?.time,
-      cameraType: currentSelection.cameraType || initialSelection?.cameraType,
-      outdoorCount: currentSelection.outdoorCount,
-      indoorCount: currentSelection.indoorCount,
-      iotOptions: currentSelection.iotOptions && currentSelection.iotOptions.length > 0 ? currentSelection.iotOptions.join(', ') : null,
-      specialOptions: currentSelection.specialOptions && currentSelection.specialOptions.length > 0 ? currentSelection.specialOptions.join(', ') : null,
-      hasInternet: contactInfo.hasInternet,
-      ptzCount: currentSelection.ptzCount,
-      storageOption: currentSelection.storageOption,
-      monitorInstall: currentSelection.monitorInstall,
-      submittedAt
-    }).catch(err => console.error('Email notification error:', err.message));
   } catch (error) {
     console.error('❌ Error adding price estimate to Google Sheets:', error.message);
   }
