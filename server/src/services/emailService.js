@@ -68,7 +68,7 @@ const sendFormNotification = async (formData) => {
     const appointmentDateOnly = appointmentDate ? appointmentDate.toString().slice(0, 10) : null;
     const appointmentPart = appointmentDateOnly ? `공사희망일: ${appointmentDateOnly}, ` : '';
     const internetPart = hasInternet ? `인터넷: ${hasInternet}` : '';
-    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} ${cameraCountStr}${appointmentPart}${internetPart}`.trimEnd();
+    const subject = `[솔트 신규] ${address || '-'} ${cameraType || '-'} ${cameraCountStr}${appointmentPart}${internetPart}`.trimEnd().replace(/,\s*$/, '');
     
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
