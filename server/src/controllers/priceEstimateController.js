@@ -1,6 +1,5 @@
 const PriceEstimate = require('../models/PriceEstimate');
 const { addPriceEstimate, getAllSheetEstimates } = require('../services/googleSheets');
-const { sendFormNotification } = require('../services/emailService');
 
 // Helper function to validate phone number (must be 11 digits)
 const validatePhoneNumber = (phoneNumber) => {
@@ -35,29 +34,10 @@ exports.submitPriceEstimate = async (req, res) => {
     estimateData.converted = true; // Full consultation is always a conversion
 
     // ALWAYS update Google Sheets first (even if DB fails)
+    // (email notification is sent inside addPriceEstimate)
     addPriceEstimate(estimateData).catch(err => 
       console.error('Google Sheets error:', err.message)
     );
-
-    // Send email notification
-    sendFormNotification({
-      formType: '상담신청',
-      phoneNumber: estimateData.contactInfo?.phoneNumber,
-      address: estimateData.contactInfo?.address,
-      locationType: estimateData.contactInfo?.locationType,
-      appointmentDate: estimateData.appointment?.date,
-      appointmentTime: estimateData.appointment?.time,
-      cameraType: estimateData.currentSelection?.cameraType,
-      outdoorCount: estimateData.currentSelection?.outdoorCount,
-      indoorCount: estimateData.currentSelection?.indoorCount,
-      iotOptions: estimateData.currentSelection?.iotOptions?.join(', '),
-      specialOptions: estimateData.currentSelection?.specialOptions?.join(', '),
-      hasInternet: estimateData.contactInfo?.hasInternet,
-      ptzCount: estimateData.currentSelection?.ptzCount,
-      storageOption: estimateData.currentSelection?.storageOption,
-      monitorInstall: estimateData.currentSelection?.monitorInstall,
-      submittedAt: estimateData.submittedAt
-    }).catch(err => console.error('Email notification error:', err.message));
 
     // Then try to save to database
     try {
@@ -115,29 +95,10 @@ exports.submitQuickEstimate = async (req, res) => {
     estimateData.converted = true; // 간편신청 is always a conversion
 
     // ALWAYS update Google Sheets first (even if DB fails)
+    // (email notification is sent inside addPriceEstimate)
     addPriceEstimate(estimateData).catch(err => 
       console.error('Google Sheets error:', err.message)
     );
-
-    // Send email notification
-    sendFormNotification({
-      formType: '간편견적',
-      phoneNumber: estimateData.contactInfo?.phoneNumber,
-      address: estimateData.contactInfo?.address,
-      locationType: estimateData.contactInfo?.locationType,
-      appointmentDate: estimateData.appointment?.date,
-      appointmentTime: estimateData.appointment?.time,
-      cameraType: estimateData.currentSelection?.cameraType,
-      outdoorCount: estimateData.currentSelection?.outdoorCount,
-      indoorCount: estimateData.currentSelection?.indoorCount,
-      iotOptions: estimateData.currentSelection?.iotOptions?.join(', '),
-      specialOptions: estimateData.currentSelection?.specialOptions?.join(', '),
-      hasInternet: estimateData.contactInfo?.hasInternet,
-      ptzCount: estimateData.currentSelection?.ptzCount,
-      storageOption: estimateData.currentSelection?.storageOption,
-      monitorInstall: estimateData.currentSelection?.monitorInstall,
-      submittedAt: estimateData.submittedAt
-    }).catch(err => console.error('Email notification error:', err.message));
 
     // Then try to save to database
     try {

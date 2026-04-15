@@ -212,7 +212,7 @@ const addPriceEstimate = async (data) => {
       phoneNumber: contactInfo.phoneNumber,
       address: contactInfo.address,
       locationType: contactInfo.locationType,
-      appointmentDate: appointment?.date ? new Date(appointment.date).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }) : null,
+      appointmentDate: appointment?.date || null,
       appointmentTime: appointment?.time,
       cameraType: currentSelection.cameraType || initialSelection?.cameraType,
       outdoorCount: currentSelection.outdoorCount,

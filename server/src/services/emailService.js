@@ -93,7 +93,7 @@ const sendFormNotification = async (formData) => {
           </tr>
           <tr style="background-color: #f5f5f5;">
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">희망 날짜</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">${appointmentDate || '-'}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${appointmentDateOnly || '-'}</td>
           </tr>
           <tr>
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">희망 시간</td>
