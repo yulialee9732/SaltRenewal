@@ -517,95 +517,73 @@ const addCustomerQuestion = async (data) => {
     }
 
     const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID;
-    const sheetName = '고객 질문';
+    const sheetName = 'SALT 상담신청';
 
-    const { phone, question, ipAddress, mongoId } = data;
-    const timestamp = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+    const { phone, question, ipAddress } = data;
 
-    // Row format: 현황 / 시간 / 연락처 / 질문 / 읽음 / IP주소
+    // Format time as MM.DD.YYYY HH:mm (Seoul timezone)
+    const now = new Date();
+    const opts = { timeZone: 'Asia/Seoul' };
+    const day    = now.toLocaleString('en-US', { ...opts, day:    '2-digit' });
+    const month  = now.toLocaleString('en-US', { ...opts, month:  '2-digit' });
+    const year   = now.toLocaleString('en-US', { ...opts, year:   'numeric' });
+    const hour   = now.toLocaleString('en-US', { ...opts, hour:   '2-digit', hour12: false });
+    const minute = now.toLocaleString('en-US', { ...opts, minute: '2-digit' });
+    const timestamp = `${month}.${day}.${year} ${hour}:${minute}`;
+
+    // Column order: 현황/시간/경로/연락처(D)/타입(E)/주소/희망날짜/희망시간/화소/실외/실내/IoT/특수공사/인터넷/메모/인입 폼/IP
     const row = [
-      '대기중', // 현황
-      timestamp,
-      phone || '',
-      question || '',
-      'X', // Not read
-      ipAddress || ''
+      '대기중',          // A 현황
+      timestamp,         // B 시간
+      '솔트',            // C 경로
+      phone || '-',      // D 연락처
+      question || '-',   // E 타입 (question text)
+      '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', // F~O
+      '고객 질문형',     // P 인입 폼
+      ipAddress || '-'   // Q IP
     ];
 
     // Get the sheet ID
     const spreadsheet = await sheets.spreadsheets.get({
       spreadsheetId: SPREADSHEET_ID,
     });
-    
+
     const targetSheet = spreadsheet.data.sheets.find(s => s.properties.title === sheetName);
-    
     if (!targetSheet) {
-      // Create the sheet if it doesn't exist
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId: SPREADSHEET_ID,
-        resource: {
-          requests: [{
-            addSheet: {
-              properties: {
-                title: sheetName
-              }
-            }
-          }]
-        }
-      });
-
-      // Add headers
-      await sheets.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `${sheetName}!A1:F1`,
-        valueInputOption: 'USER_ENTERED',
-        resource: {
-          values: [['현황', '시간', '연락처', '질문', '읽음', 'IP주소']],
-        },
-      });
-
-      // Add the data row
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `${sheetName}!A:F`,
-        valueInputOption: 'USER_ENTERED',
-        resource: {
-          values: [row],
-        },
-      });
-    } else {
-      const sheetId = targetSheet.properties.sheetId;
-
-      // Insert a new row at position 2 (after header)
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId: SPREADSHEET_ID,
-        resource: {
-          requests: [{
-            insertDimension: {
-              range: {
-                sheetId: sheetId,
-                dimension: 'ROWS',
-                startIndex: 1,
-                endIndex: 2
-              },
-              inheritFromBefore: false
-            }
-          }]
-        }
-      });
-
-      // Update the newly inserted row
-      await sheets.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `${sheetName}!A2`,
-        valueInputOption: 'USER_ENTERED',
-        resource: {
-          values: [row],
-        },
-      });
+      console.error(`❌ Sheet "${sheetName}" not found`);
+      return false;
     }
+    const sheetId = targetSheet.properties.sheetId;
 
-    console.log('✅ Customer question added to Google Sheets');
+    // Insert a new row at position 2 (after header)
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: SPREADSHEET_ID,
+      resource: {
+        requests: [{
+          insertDimension: {
+            range: {
+              sheetId: sheetId,
+              dimension: 'ROWS',
+              startIndex: 1,
+              endIndex: 2
+            },
+            inheritFromBefore: false
+          }
+        }]
+      }
+    });
+
+    // Update the newly inserted row
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${sheetName}!A2`,
+      valueInputOption: 'USER_ENTERED',
+      resource: {
+        values: [row],
+      },
+    });
+
+    console.log('✅ Customer question added to SALT 상담신청');
     return true;
   } catch (error) {
     console.error('❌ Error adding customer question to Google Sheets:', error.message);
