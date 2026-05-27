@@ -1,0 +1,12 @@
+{
+  "name": "salt-renewal",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix mern-app/server\" \"npm start --prefix mern-app/client\"",
+    "server": "npm run dev --prefix mern-app/server",
+    "client": "npm start --prefix mern-app/client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
