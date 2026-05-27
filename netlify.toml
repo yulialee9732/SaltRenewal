@@ -1,0 +1,20 @@
+[build]
+  base = "mern-app/client"
+  publish = "build"
+  command = "npm install && npm run build"
+
+[build.environment]
+  REACT_APP_API_URL = "https://saltrenewal.onrender.com/api"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
